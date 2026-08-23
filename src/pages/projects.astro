@@ -22,7 +22,7 @@ const sortedProjects = await getProjects();
     </div>
 
     <!-- Quiet Editorial Stack (Side-by-Side 2-Column Split for media, Flat rows for text) -->
-    <div>
+    <div id="projects-list">
       {
         sortedProjects.map((project) => {
           const hasImage = Boolean(project.image_url);
@@ -98,9 +98,7 @@ const sortedProjects = await getProjects();
                   </div>
 
                   <!-- 2-Sentence Description -->
-                  <p class="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans font-normal">
-                    {project.description}
-                  </p>
+                  <p set:html={project.description} class="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans font-normal" />
 
                   <!-- Tech Stack Tags -->
                   <div class="font-pixel text-xs text-neutral-500 dark:text-neutral-400 pt-1">
@@ -161,9 +159,7 @@ const sortedProjects = await getProjects();
                   </div>
                 </div>
 
-                <p class="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans font-normal">
-                  {project.description}
-                </p>
+                <p set:html={project.description} class="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans font-normal" />
 
                 <div class="font-pixel text-xs text-neutral-500 dark:text-neutral-400 pt-1">
                   {project.tags.join(' · ')}
@@ -175,4 +171,83 @@ const sortedProjects = await getProjects();
       }
     </div>
   </div>
+
+  <!-- Client-side hydration script for instant live Supabase data updates -->
+  <script>
+    import { getProjects } from '../lib/supabase';
+
+    async function refreshProjectsPage() {
+      try {
+        const projects = await getProjects();
+        const container = document.getElementById('projects-list');
+        if (container && projects && projects.length > 0) {
+          container.innerHTML = projects
+            .map((project) => {
+              const hasImage = Boolean(project.image_url);
+              const hasLiveUrl = Boolean(project.live_url);
+              const hasGithubUrl = Boolean(project.github_url);
+              const tagStr = project.tags ? project.tags.join(' · ') : '';
+
+              const liveLinkHtml = hasLiveUrl
+                ? `<a href="${project.live_url}" target="_blank" rel="noopener noreferrer" class="link-slate">Live Demo ↗</a><span>/</span>`
+                : '';
+              const githubLinkHtml = hasGithubUrl
+                ? `<a href="${project.github_url}" target="_blank" rel="noopener noreferrer" class="link-slate">GitHub ↗</a><span>/</span>`
+                : '';
+
+              if (hasImage) {
+                return `
+                <article class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center py-8 border-b border-[#d0d0d0] dark:border-[#404040] last:border-0">
+                  <div class="md:col-span-5">
+                    <a href="/projects/${project.slug}" class="block aspect-[16/10] overflow-hidden rounded-md border border-[#d0d0d0] dark:border-[#404040] group">
+                      <img src="${project.image_url}" alt="${project.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                    </a>
+                  </div>
+                  <div class="md:col-span-7 space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+                      <h2 class="text-base font-bold font-pixel">
+                        <a href="/projects/${project.slug}" class="link-slate">${project.title}</a>
+                      </h2>
+                      <div class="flex items-center space-x-2.5 text-xs font-pixel text-neutral-500 shrink-0">
+                        <span>${project.date}</span>
+                        <span>/</span>
+                        ${liveLinkHtml}
+                        ${githubLinkHtml}
+                        <a href="/projects/${project.slug}" class="link-slate">View Case Study →</a>
+                      </div>
+                    </div>
+                    <p class="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans font-normal">${project.description}</p>
+                    <div class="font-pixel text-xs text-neutral-500 dark:text-neutral-400 pt-1">${tagStr}</div>
+                  </div>
+                </article>`;
+              } else {
+                return `
+                <article class="space-y-3 py-8 border-b border-[#d0d0d0] dark:border-[#404040] last:border-0">
+                  <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+                    <h2 class="text-base font-bold font-pixel">
+                      <a href="/projects/${project.slug}" class="link-slate">${project.title}</a>
+                    </h2>
+                    <div class="flex items-center space-x-2.5 text-xs font-pixel text-neutral-500 shrink-0">
+                      <span>${project.date}</span>
+                      <span>/</span>
+                      ${liveLinkHtml}
+                      ${githubLinkHtml}
+                      <a href="/projects/${project.slug}" class="link-slate">View Case Study →</a>
+                    </div>
+                  </div>
+                  <p class="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans font-normal">${project.description}</p>
+                  <div class="font-pixel text-xs text-neutral-500 dark:text-neutral-400 pt-1">${tagStr}</div>
+                </article>`;
+              }
+            })
+            .join('');
+        }
+      } catch {
+        // Keep pre-rendered HTML
+      }
+    }
+
+    refreshProjectsPage();
+    document.addEventListener('astro:after-swap', refreshProjectsPage);
+  </script>
 </BaseLayout>
