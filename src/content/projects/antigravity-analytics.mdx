@@ -1,0 +1,34 @@
+---
+title: "Antigravity Analytics"
+description: "Privacy-focused, real-time web telemetry and performance monitoring dashboard."
+date: "2024"
+tags: ["Astro", "TypeScript", "Three.js", "WebGL", "Shaders"]
+featured: true
+githubUrl: "https://github.com"
+liveUrl: "https://example.com"
+order: 2
+image: "/assets/antigravity-analytics.jpg"
+
+problem: "Traditional analytics tools introduced heavy 40KB+ tracking scripts, blocked main thread rendering, and compromised user data privacy."
+user: "Product managers, performance engineers, and privacy-conscious web creators requiring real-time web telemetry."
+solution: "Engineered an edge-computed analytics dashboard powered by Astro SSG, WebGL GPU visualization shaders, and a lightweight 1.2KB telemetry collector."
+keyFeatures:
+  - "1.2KB async telemetry script with zero main-thread blocking"
+  - "Real-time 3D WebGL particle visualization of active visitor traffic"
+  - "Cookieless privacy preservation compliant with GDPR & CCPA standards"
+  - "Instant Core Web Vitals (LCP, INP, CLS) performance score reporting"
+challenge: "Rendering 50,000 concurrent visitor data nodes in a WebGL canvas at 60 FPS without overheating mobile GPU devices."
+impact: "Processed 10M+ daily events with sub-5ms edge latency, reducing telemetry script load time from 450ms to 12ms."
+techChoices:
+  - tech: "Astro v4"
+    rationale: "Delivered static HTML shell with zero client JavaScript overhead for the primary dashboard UI."
+  - tech: "Three.js & GLSL Shaders"
+    rationale: "Offloaded 3D data point rendering to WebGL shaders for smooth 60 FPS data visualization."
+  - tech: "TypeScript"
+    rationale: "Ensured end-to-end data safety between Cloudflare Workers edge functions and frontend state."
+screenshot: "/assets/antigravity-analytics.jpg"
+---
+
+# Antigravity Analytics
+
+Antigravity Analytics provides privacy-first, high-throughput web telemetry without sacrificing browser performance.

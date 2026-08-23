@@ -1,0 +1,103 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getExperiences, getAchievements } from '../lib/supabase';
+
+const sortedExperience = await getExperiences();
+const achievements = await getAchievements();
+---
+
+<BaseLayout
+  title="Experience — Alex Chen"
+  description="Work history, technical leadership, and engineering achievements."
+>
+  <div class="space-y-16 max-w-3xl mx-auto">
+    <!-- Header Section -->
+    <div class="space-y-2 border-b border-[#d0d0d0] dark:border-[#404040] pb-6">
+      <!-- Page Title: Experience (Capitalized) -->
+      <h1 class="text-xl font-bold tracking-tight text-[#1a1a1a] dark:text-[#e8e8e8] font-pixel">
+        Experience
+      </h1>
+      <p class="text-sm font-sans text-neutral-600 dark:text-neutral-400 leading-relaxed">
+        Work history, technical leadership, and engineering achievements.
+      </p>
+    </div>
+
+    <!-- Section 1: Work Experience (Dynamically Fetched from Supabase) -->
+    <section class="space-y-8">
+      <!-- Section Header: Work Experience (Capitalized) -->
+      <h2 class="text-xs font-pixel font-bold tracking-wider text-neutral-500 dark:text-neutral-400 border-b border-[#d0d0d0] dark:border-[#404040] pb-3 uppercase">
+        Work Experience
+      </h2>
+
+      <div class="space-y-10">
+        {
+          sortedExperience.map((exp) => (
+            <article class="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-8 pb-10 border-b border-neutral-300/30 dark:border-neutral-800/60 last:border-0 last:pb-0">
+              <!-- Left Column: Date Range (4 cols) in Departure Mono -->
+              <div class="sm:col-span-4 font-pixel text-xs text-neutral-500">
+                {exp.start_date} — {exp.end_date}
+              </div>
+
+              <!-- Right Column: Role Title & Impact Bullet Points -->
+              <div class="sm:col-span-8 space-y-3">
+                <div>
+                  <h3 class="text-base font-bold text-[#1a1a1a] dark:text-[#e8e8e8] font-pixel">
+                    {exp.role}
+                  </h3>
+                  <p class="text-xs font-sans text-neutral-500 mt-0.5">
+                    {exp.company} · {exp.location}
+                  </p>
+                </div>
+
+                <!-- 2–3 Concise Impact Bullet Points using Standard Dashes (—) -->
+                {exp.highlights && exp.highlights.length > 0 && (
+                  <ul class="space-y-2 text-sm font-sans text-neutral-700 dark:text-neutral-300">
+                    {exp.highlights.map((item) => (
+                      <li class="flex items-start space-x-2 leading-relaxed">
+                        <span class="text-neutral-400 font-pixel text-xs shrink-0 mt-0.5">—</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Section 2: Achievements & Honors (Dynamically Fetched from Supabase) -->
+    <section class="space-y-8 pt-4">
+      <h2 class="text-xs font-pixel font-bold tracking-wider text-neutral-500 dark:text-neutral-400 border-b border-[#d0d0d0] dark:border-[#404040] pb-3 uppercase">
+        Achievements & Honors
+      </h2>
+
+      <div class="space-y-8">
+        {
+          achievements.map((item) => (
+            <article class="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-8 pb-8 border-b border-neutral-300/30 dark:border-neutral-800/60 last:border-0 last:pb-0">
+              <!-- Left Column: Date (4 cols) in Departure Mono -->
+              <div class="sm:col-span-4 font-pixel text-xs text-neutral-500">
+                {item.date}
+              </div>
+
+              <!-- Right Column: Title, Entity & 1-Line Detail -->
+              <div class="sm:col-span-8 space-y-1">
+                <h3 class="font-bold text-xs text-[#1a1a1a] dark:text-[#e8e8e8] font-pixel">
+                  {item.title}
+                </h3>
+                <p class="text-xs font-sans text-neutral-500">
+                  {item.entity}
+                </p>
+                <p class="text-sm font-sans text-neutral-700 dark:text-neutral-300 leading-relaxed pt-0.5 font-normal">
+                  {item.impact}
+                </p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</BaseLayout>

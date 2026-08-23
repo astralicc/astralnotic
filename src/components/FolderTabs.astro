@@ -1,0 +1,79 @@
+---
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+
+const tabs = [
+  { path: "/", label: "~/about", name: "About" },
+  { path: "/projects", label: "~/projects [3]", name: "Projects" },
+  { path: "/experience", label: "~/experience [3]", name: "Experience" },
+];
+---
+
+<header class="w-full select-none pt-4">
+  <!-- Clean Top Control Line -->
+  <div class="flex items-center justify-between px-2 pb-3 text-xs font-mono border-b border-neutral-300 dark:border-[#404040] mb-3">
+    <!-- Brand Mark -->
+    <a href="/" class="flex items-center space-x-2 font-bold hover:opacity-80 transition-opacity text-neutral-900 dark:text-white">
+      <span class="text-emerald-500 font-extrabold">&gt;_</span>
+      <span>alex.chen<span class="text-neutral-500 dark:text-neutral-400 font-normal">()</span></span>
+    </a>
+
+    <!-- Right Controls: Binary Theme Switcher -->
+    <div>
+      <button
+        id="binary-theme-toggle"
+        type="button"
+        aria-label="Toggle dark/light mode"
+        class="font-mono text-xs px-3 py-1 rounded bg-neutral-300/70 dark:bg-neutral-800 border border-neutral-400/60 dark:border-neutral-700 text-neutral-900 dark:text-white hover:border-neutral-500 dark:hover:border-neutral-500 transition-colors cursor-pointer flex items-center space-x-1.5"
+      >
+        <span class="text-neutral-500 dark:text-neutral-400">MODE:</span>
+        <span id="theme-binary-label" class="font-bold">
+          <span class="dark:hidden">[0/LIGHT]</span>
+          <span class="hidden dark:inline">[1/DARK]</span>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Physical Folder Tabs Navbar -->
+  <div class="flex items-end space-x-1.5 border-b border-neutral-300 dark:border-[#404040]">
+    {
+      tabs.map((tab) => {
+        const isActive =
+          tab.path === "/"
+            ? currentPath === "/"
+            : currentPath.startsWith(tab.path);
+
+        return (
+          <a
+            href={tab.path}
+            class={`relative font-mono text-xs sm:text-sm px-4 py-2 rounded-t-md transition-all duration-150 flex items-center space-x-2 border-t border-x ${
+              isActive
+                ? "z-10 bg-[#e8e8e8] dark:bg-[#2b2b2b] text-neutral-900 dark:text-white border-neutral-300 dark:border-[#404040] font-semibold -mb-[1px] pb-2.5"
+                : "bg-neutral-300/60 dark:bg-[#222222] text-neutral-600 dark:text-neutral-400 border-neutral-300/80 dark:border-neutral-800 hover:bg-neutral-300 dark:hover:bg-[#282828] hover:text-neutral-900 dark:hover:text-neutral-200"
+            }`}
+          >
+            <!-- Folder Icon -->
+            <svg
+              class={`w-3.5 h-3.5 ${isActive ? "text-neutral-900 dark:text-white" : "text-neutral-500 dark:text-neutral-500"}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.8"
+                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+              ></path>
+            </svg>
+            <span>{tab.label}</span>
+          </a>
+        );
+      })
+    }
+  </div>
+</header>
