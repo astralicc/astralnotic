@@ -64,6 +64,11 @@ export interface CurrentlyItem {
   display_order?: number;
 }
 
+export interface ConnectLink {
+  label: string;
+  url: string;
+}
+
 export interface SiteMetadata {
   id?: string;
   key: string;
@@ -223,6 +228,13 @@ const FALLBACK_CURRENTLY: CurrentlyItem[] = [
   { action: 'Exploring', detail: 'Canvas API & WebGL shaders', display_order: 3 },
 ];
 
+const FALLBACK_CONNECT_LINKS: ConnectLink[] = [
+  { label: 'GitHub', url: 'https://github.com' },
+  { label: 'Twitter', url: 'https://x.com' },
+  { label: 'LinkedIn', url: 'https://linkedin.com' },
+  { label: 'Email', url: 'mailto:alex@example.com' },
+];
+
 const FALLBACK_PROFILE = {
   name: 'Alex Chen',
   roles: ['senior frontend engineer', 'ui/ux architect'],
@@ -230,6 +242,7 @@ const FALLBACK_PROFILE = {
     "I'm Alex, a frontend engineer and creative technologist based in San Francisco. Currently, I'm leading web application architecture and design systems at V6 Studio, and previously helped build core UI component engines at Astro Core.",
     "I specialize in zero-runtime CSS tokens, React 19 concurrent rendering pipelines, and accessible WCAG 2.1 component primitives. Outside of work, I spend time drawing, tinkering with open-source utilities, and exploring minimalist web design.",
   ],
+  connect_links: FALLBACK_CONNECT_LINKS,
 };
 
 // 5. Data Fetching Functions
@@ -253,6 +266,7 @@ export async function getProfile() {
       name: metadataMap.name || FALLBACK_PROFILE.name,
       roles: metadataMap.roles || FALLBACK_PROFILE.roles,
       bio: metadataMap.bio || FALLBACK_PROFILE.bio,
+      connect_links: metadataMap.connect_links || FALLBACK_PROFILE.connect_links,
     };
   } catch {
     return FALLBACK_PROFILE;

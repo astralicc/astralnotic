@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getProjects, getCurrentlyItems, getProfile } from '../lib/supabase';
+import { getProjects, getCurrentlyItems, getProfile, type ConnectLink } from '../lib/supabase';
 
 const profile = await getProfile();
 const allProjects = await getProjects();
@@ -44,27 +44,31 @@ const currentlyItems = await getCurrentlyItems();
           </div>
         </div>
 
-        <!-- CONNECT Section -->
+        <!-- CONNECT Section (Dynamically Fetched from Supabase) -->
         <div class="space-y-2 font-pixel text-xs">
           <div class="text-[10px] text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-2 font-pixel">
             connect
           </div>
-          <div class="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-neutral-600 dark:text-neutral-400">
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="link-slate">
-              GitHub ↗
-            </a>
-            <span class="text-neutral-400 dark:text-neutral-600">/</span>
-            <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="link-slate">
-              Twitter ↗
-            </a>
-            <span class="text-neutral-400 dark:text-neutral-600">/</span>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="link-slate">
-              LinkedIn ↗
-            </a>
-            <span class="text-neutral-400 dark:text-neutral-600">/</span>
-            <a href="mailto:alex@example.com" class="link-slate">
-              Email ↗
-            </a>
+          <div id="connect-links" class="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-neutral-600 dark:text-neutral-400">
+            {
+              profile.connect_links.map((link: ConnectLink, index: number) => {
+                const isMail = link.url.startsWith('mailto:');
+                const isLast = index === profile.connect_links.length - 1;
+                return (
+                  <>
+                    <a
+                      href={link.url}
+                      target={isMail ? undefined : '_blank'}
+                      rel={isMail ? undefined : 'noopener noreferrer'}
+                      class="link-slate"
+                    >
+                      {link.label} ↗
+                    </a>
+                    {!isLast && <span class="text-neutral-400 dark:text-neutral-600">/</span>}
+                  </>
+                );
+              })
+            }
           </div>
         </div>
 
@@ -153,7 +157,7 @@ const currentlyItems = await getCurrentlyItems();
 
   <!-- Client-side hydration script for instant live Supabase data updates -->
   <script>
-    import { getCurrentlyItems, getProfile } from '../lib/supabase';
+    import { getCurrentlyItems, getProfile, type ConnectLink } from '../lib/supabase';
 
     async function refreshLiveData() {
       try {
@@ -170,6 +174,18 @@ const currentlyItems = await getCurrentlyItems();
           if (rolesEl && profile.roles) {
             rolesEl.innerHTML = profile.roles
               .map((r: string) => `<div class="leading-snug">${r}</div>`)
+              .join('');
+          }
+
+          const connectEl = document.getElementById('connect-links');
+          if (connectEl && profile.connect_links && profile.connect_links.length > 0) {
+            connectEl.innerHTML = profile.connect_links
+              .map((link: ConnectLink, idx: number) => {
+                const isMail = link.url.startsWith('mailto:');
+                const isLast = idx === profile.connect_links.length - 1;
+                const linkHtml = `<a href="${link.url}" ${isMail ? '' : 'target="_blank" rel="noopener noreferrer"'} class="link-slate">${link.label} ↗</a>`;
+                return isLast ? linkHtml : `${linkHtml}<span class="text-neutral-400 dark:text-neutral-600">/</span>`;
+              })
               .join('');
           }
 
