@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 
-// 1. Supabase Environment Variables (with hardcoded fallback to your active bseoyiyoqykafltzxdsl database)
+// 1. Supabase Environment Variables (with fallback to your active bseoyiyoqykafltzxdsl database)
 const supabaseUrl =
   import.meta.env.PUBLIC_SUPABASE_URL ||
   'https://bseoyiyoqykafltzxdsl.supabase.co';
@@ -70,7 +70,7 @@ export interface SiteMetadata {
   value: any;
 }
 
-// 4. Fallback Static Data (Guarantees clean rendering if network query fails)
+// 4. Fallback Static Data
 
 const FALLBACK_PROJECTS: Project[] = [
   {
@@ -223,7 +223,41 @@ const FALLBACK_CURRENTLY: CurrentlyItem[] = [
   { action: 'Exploring', detail: 'Canvas API & WebGL shaders', display_order: 3 },
 ];
 
+const FALLBACK_PROFILE = {
+  name: 'Alex Chen',
+  roles: ['senior frontend engineer', 'ui/ux architect'],
+  bio: [
+    "I'm Alex, a frontend engineer and creative technologist based in San Francisco. Currently, I'm leading web application architecture and design systems at V6 Studio, and previously helped build core UI component engines at Astro Core.",
+    "I specialize in zero-runtime CSS tokens, React 19 concurrent rendering pipelines, and accessible WCAG 2.1 component primitives. Outside of work, I spend time drawing, tinkering with open-source utilities, and exploring minimalist web design.",
+  ],
+};
+
 // 5. Data Fetching Functions
+
+export async function getProfile() {
+  try {
+    const { data, error } = await supabase
+      .from('site_metadata')
+      .select('*');
+
+    if (error || !data || data.length === 0) {
+      return FALLBACK_PROFILE;
+    }
+
+    const metadataMap: Record<string, any> = {};
+    data.forEach((row) => {
+      metadataMap[row.key] = row.value;
+    });
+
+    return {
+      name: metadataMap.name || FALLBACK_PROFILE.name,
+      roles: metadataMap.roles || FALLBACK_PROFILE.roles,
+      bio: metadataMap.bio || FALLBACK_PROFILE.bio,
+    };
+  } catch {
+    return FALLBACK_PROFILE;
+  }
+}
 
 export async function getProjects(): Promise<Project[]> {
   try {
