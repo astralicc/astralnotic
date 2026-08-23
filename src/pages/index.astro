@@ -115,7 +115,7 @@ const currentlyItems = await getCurrentlyItems();
 
         <!-- Hairline Divider -->
         <div class="border-t border-[#d0d0d0] dark:border-[#404040] pt-8 mt-8">
-          <!-- Recent Projects Section (Dynamically Fetched from Supabase) -->
+          <!-- Recent Projects Section (Dynamically Fetched & Perfectly Aligned Grid) -->
           <div class="space-y-6">
             <div class="flex items-center justify-between">
               <!-- Recent Projects (Capitalized) -->
@@ -127,23 +127,25 @@ const currentlyItems = await getCurrentlyItems();
               </a>
             </div>
 
-            <!-- Quiet Project List (Clean text rows with project title on left & plain-text tags on right) -->
-            <div class="space-y-4">
+            <!-- Quiet Project List (Perfect 12-column grid alignment) -->
+            <div id="recent-projects-list" class="space-y-4">
               {
                 recentProjects.map((project) => {
                   const tagStr = project.tags.join(' · ');
                   return (
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 py-1 text-sm border-b border-neutral-300/30 dark:border-neutral-800/60 pb-3 last:border-0">
-                      <a
-                        href={`/projects/${project.slug}`}
-                        class="font-pixel font-bold link-slate"
-                      >
-                        {project.title}
-                      </a>
+                    <div class="grid grid-cols-1 sm:grid-cols-12 items-baseline gap-2 py-2 text-sm border-b border-neutral-300/30 dark:border-neutral-800/60 pb-3 last:border-0">
+                      <div class="sm:col-span-5">
+                        <a
+                          href={`/projects/${project.slug}`}
+                          class="font-pixel font-bold link-slate block"
+                        >
+                          {project.title}
+                        </a>
+                      </div>
 
-                      <span class="font-pixel text-xs text-neutral-500 dark:text-neutral-400">
+                      <div class="sm:col-span-7 sm:text-right font-pixel text-xs text-neutral-500 dark:text-neutral-400">
                         {tagStr}
-                      </span>
+                      </div>
                     </div>
                   );
                 })
@@ -157,13 +159,14 @@ const currentlyItems = await getCurrentlyItems();
 
   <!-- Client-side hydration script for instant live Supabase data updates -->
   <script>
-    import { getCurrentlyItems, getProfile, type ConnectLink } from '../lib/supabase';
+    import { getCurrentlyItems, getProfile, getProjects, type ConnectLink } from '../lib/supabase';
 
     async function refreshLiveData() {
       try {
-        const [profile, items] = await Promise.all([
+        const [profile, items, projects] = await Promise.all([
           getProfile(),
           getCurrentlyItems(),
+          getProjects(),
         ]);
 
         if (profile) {
@@ -212,6 +215,27 @@ const currentlyItems = await getCurrentlyItems();
               <span class="font-sans text-neutral-600 dark:text-neutral-400">${item.detail}</span>
             </li>`
             )
+            .join('');
+        }
+
+        const recentProjectsEl = document.getElementById('recent-projects-list');
+        if (recentProjectsEl && projects && projects.length > 0) {
+          const recentList = projects.slice(0, 3);
+          recentProjectsEl.innerHTML = recentList
+            .map((project) => {
+              const tagStr = project.tags ? project.tags.join(' · ') : '';
+              return `
+              <div class="grid grid-cols-1 sm:grid-cols-12 items-baseline gap-2 py-2 text-sm border-b border-neutral-300/30 dark:border-neutral-800/60 pb-3 last:border-0">
+                <div class="sm:col-span-5">
+                  <a href="/projects/${project.slug}" class="font-pixel font-bold link-slate block">
+                    ${project.title}
+                  </a>
+                </div>
+                <div class="sm:col-span-7 sm:text-right font-pixel text-xs text-neutral-500 dark:text-neutral-400">
+                  ${tagStr}
+                </div>
+              </div>`;
+            })
             .join('');
         }
       } catch {
