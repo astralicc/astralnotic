@@ -98,13 +98,13 @@ const currentlyItems = await getCurrentlyItems();
           Hi! 👋
         </h2>
 
-        <!-- Bio Paragraphs -->
+        <!-- Bio Paragraphs (Supports HTML <strong> tags for bolding) -->
         <div id="profile-bio" class="space-y-4 text-sm sm:text-base leading-relaxed text-[#1a1a1a] dark:text-neutral-200 font-sans">
           {
             Array.isArray(profile.bio) ? (
-              profile.bio.map((paragraph: string) => <p>{paragraph}</p>)
+              profile.bio.map((paragraph: string) => <p set:html={paragraph} />)
             ) : (
-              <p>{profile.bio}</p>
+              <p set:html={profile.bio} />
             )
           }
         </div>
