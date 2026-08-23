@@ -230,7 +230,6 @@ const FALLBACK_CURRENTLY: CurrentlyItem[] = [
 
 const FALLBACK_CONNECT_LINKS: ConnectLink[] = [
   { label: 'GitHub', url: 'https://github.com' },
-  { label: 'Twitter', url: 'https://x.com' },
   { label: 'LinkedIn', url: 'https://linkedin.com' },
   { label: 'Email', url: 'mailto:alex@example.com' },
 ];
