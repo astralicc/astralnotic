@@ -1,8 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
 
-// 1. Supabase Environment Variables
-const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
-const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key';
+// 1. Supabase Environment Variables (with hardcoded fallback to your active bseoyiyoqykafltzxdsl database)
+const supabaseUrl =
+  import.meta.env.PUBLIC_SUPABASE_URL ||
+  'https://bseoyiyoqykafltzxdsl.supabase.co';
+
+const supabaseAnonKey =
+  import.meta.env.PUBLIC_SUPABASE_ANON_KEY ||
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzZW95aXlvcXlrYWZsdHp4ZHNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0ODgzNTIsImV4cCI6MjEwMzA2NDM1Mn0._mDVBaU0IAmqPxktRqY-q2VZ5I_zgi6uJSxXulvUmH0';
 
 // 2. Initialize Supabase Client
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
@@ -65,7 +70,7 @@ export interface SiteMetadata {
   value: any;
 }
 
-// 4. Fallback Static Data (Guarantees clean rendering before Supabase tables are seeded)
+// 4. Fallback Static Data (Guarantees clean rendering if network query fails)
 
 const FALLBACK_PROJECTS: Project[] = [
   {
@@ -218,7 +223,7 @@ const FALLBACK_CURRENTLY: CurrentlyItem[] = [
   { action: 'Exploring', detail: 'Canvas API & WebGL shaders', display_order: 3 },
 ];
 
-// 5. High-Level Data Fetching Helper Functions
+// 5. Data Fetching Functions
 
 export async function getProjects(): Promise<Project[]> {
   try {

@@ -1,6 +1,4 @@
 ---
-export const prerender = false;
-
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getProjects, getCurrentlyItems } from '../lib/supabase';
 
@@ -79,7 +77,7 @@ const roles = [
           <div class="text-[10px] text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-2 font-pixel">
             currently
           </div>
-          <ul class="space-y-2 text-xs">
+          <ul id="currently-list" class="space-y-2 text-xs">
             {
               currentlyItems.map((item) => (
                 <li class="leading-relaxed">
@@ -155,4 +153,33 @@ const roles = [
       </div>
     </div>
   </div>
+
+  <!-- Client-side hydration script for instant live Supabase data updates -->
+  <script>
+    import { getCurrentlyItems } from '../lib/supabase';
+
+    async function refreshCurrently() {
+      try {
+        const items = await getCurrentlyItems();
+        const container = document.getElementById('currently-list');
+        if (container && items && items.length > 0) {
+          container.innerHTML = items
+            .map(
+              (item) => `
+            <li class="leading-relaxed">
+              <span class="font-pixel text-neutral-800 dark:text-neutral-200 font-medium">${item.action}</span>
+              <span class="text-neutral-400 dark:text-neutral-600 mx-1">—</span>
+              <span class="font-sans text-neutral-600 dark:text-neutral-400">${item.detail}</span>
+            </li>`
+            )
+            .join('');
+        }
+      } catch {
+        // keep pre-rendered html
+      }
+    }
+
+    refreshCurrently();
+    document.addEventListener('astro:after-swap', refreshCurrently);
+  </script>
 </BaseLayout>
