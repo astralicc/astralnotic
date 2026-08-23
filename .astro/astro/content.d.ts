@@ -157,21 +157,21 @@ declare module 'astro:content' {
   slug: "design-system-lead";
   body: string;
   collection: "experience";
-  data: any
+  data: InferEntrySchema<"experience">
 } & { render(): Render[".mdx"] };
 "open-source-maintainer.mdx": {
 	id: "open-source-maintainer.mdx";
   slug: "open-source-maintainer";
   body: string;
   collection: "experience";
-  data: any
+  data: InferEntrySchema<"experience">
 } & { render(): Render[".mdx"] };
 "senior-frontend-engineer.mdx": {
 	id: "senior-frontend-engineer.mdx";
   slug: "senior-frontend-engineer";
   body: string;
   collection: "experience";
-  data: any
+  data: InferEntrySchema<"experience">
 } & { render(): Render[".mdx"] };
 };
 "projects": {
@@ -180,21 +180,21 @@ declare module 'astro:content' {
   slug: "antigravity-analytics";
   body: string;
   collection: "projects";
-  data: any
+  data: InferEntrySchema<"projects">
 } & { render(): Render[".mdx"] };
 "craft-design-system.mdx": {
 	id: "craft-design-system.mdx";
   slug: "craft-design-system";
   body: string;
   collection: "projects";
-  data: any
+  data: InferEntrySchema<"projects">
 } & { render(): Render[".mdx"] };
 "minimal-astro-starter.mdx": {
 	id: "minimal-astro-starter.mdx";
   slug: "minimal-astro-starter";
   body: string;
   collection: "projects";
-  data: any
+  data: InferEntrySchema<"projects">
 } & { render(): Render[".mdx"] };
 };
 
@@ -206,5 +206,5 @@ declare module 'astro:content' {
 
 	type AnyEntryMap = ContentEntryMap & DataEntryMap;
 
-	export type ContentConfig = never;
+	export type ContentConfig = typeof import("./../../src/content/config.js");
 }
