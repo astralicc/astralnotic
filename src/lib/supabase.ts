@@ -236,6 +236,7 @@ const FALLBACK_CONNECT_LINKS: ConnectLink[] = [
 
 const FALLBACK_PROFILE = {
   name: 'Alex Chen',
+  short_name: 'chen',
   roles: ['senior frontend engineer', 'ui/ux architect'],
   bio: [
     "I'm Alex, a frontend engineer and creative technologist based in San Francisco. Currently, I'm leading web application architecture and design systems at V6 Studio, and previously helped build core UI component engines at Astro Core.",
@@ -261,8 +262,12 @@ export async function getProfile() {
       metadataMap[row.key] = row.value;
     });
 
+    const fullName = metadataMap.name || FALLBACK_PROFILE.name;
+    const computedLastName = metadataMap.short_name || metadataMap.last_name || (fullName ? fullName.split(' ').slice(-1)[0] : 'chen');
+
     return {
-      name: metadataMap.name || FALLBACK_PROFILE.name,
+      name: fullName,
+      short_name: computedLastName,
       roles: metadataMap.roles || FALLBACK_PROFILE.roles,
       bio: metadataMap.bio || FALLBACK_PROFILE.bio,
       connect_links: metadataMap.connect_links || FALLBACK_PROFILE.connect_links,
