@@ -9,7 +9,7 @@ interface Props {
 
 const {
   title = "alex chen — senior frontend engineer",
-  description = "Personal developer website of Alex Chen.",
+  description = "Personal developer website.",
 } = Astro.props;
 
 const pathname = Astro.url.pathname;
@@ -87,9 +87,10 @@ const navItems = [
     <div class="max-w-4xl w-full mx-auto px-4 sm:px-6 py-6 flex-grow flex flex-col">
       <!-- Minimal Sticky Header Navbar -->
       <header class="sticky top-0 z-50 w-full py-4 mb-10 flex items-center justify-between bg-[#e8e8e8]/90 dark:bg-[#2b2b2b]/90 backdrop-blur-md border-b border-neutral-300/40 dark:border-neutral-700/40 transition-colors duration-150">
-        <!-- Site Title on Left: alex chen -->
+        <!-- Site Title on Left: Dynamic Name from Supabase -->
         <a
           href="/"
+          id="nav-site-title"
           class="font-pixel text-sm font-normal tracking-wide text-[#1a1a1a] dark:text-white hover:text-[#4B6B94] dark:hover:text-[#7B9EC8] transition-colors"
         >
           alex chen
@@ -139,9 +140,9 @@ const navItems = [
         <slot />
       </main>
 
-      <!-- Minimal Footer with "made with ♥" -->
+      <!-- Minimal Footer with Dynamic Copyright Name -->
       <footer class="w-full py-8 border-t border-neutral-300/40 dark:border-neutral-700/40 flex items-center justify-between text-xs font-pixel text-neutral-500 dark:text-neutral-400 mt-16">
-        <div>
+        <div id="footer-site-copyright">
           <span>© {new Date().getFullYear()} alex chen</span>
         </div>
         <div class="flex items-center space-x-1.5">
@@ -151,9 +152,10 @@ const navItems = [
       </footer>
     </div>
 
-    <!-- Client Smooth Scroll Script -->
+    <!-- Client Smooth Scroll & Live Supabase Header/Footer Hydration -->
     <script>
       import Lenis from 'lenis';
+      import { getProfile } from '../lib/supabase';
 
       let lenisInstance: Lenis | null = null;
       let animationFrameId: number | null = null;
@@ -180,14 +182,37 @@ const navItems = [
         animationFrameId = requestAnimationFrame(raf);
       };
 
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initLenis);
-      } else {
+      async function updateHeaderAndFooterName() {
+        try {
+          const profile = await getProfile();
+          if (profile && profile.name) {
+            const lowerName = profile.name.toLowerCase();
+            const navEl = document.getElementById('nav-site-title');
+            if (navEl) navEl.textContent = lowerName;
+
+            const footerEl = document.getElementById('footer-site-copyright');
+            if (footerEl) {
+              footerEl.innerHTML = `<span>© ${new Date().getFullYear()} ${lowerName}</span>`;
+            }
+          }
+        } catch {
+          // Keep default pre-rendered name
+        }
+      }
+
+      const runClientInit = () => {
         initLenis();
+        updateHeaderAndFooterName();
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', runClientInit);
+      } else {
+        runClientInit();
       }
 
       document.addEventListener('astro:after-swap', () => {
-        initLenis();
+        runClientInit();
       });
     </script>
   </body>
