@@ -172,18 +172,18 @@ const showcaseItems = await getShowcaseItems();
       }
     </div>
 
-    <!-- Hairline Divider & Showcase Section -->
-    <div class="border-t border-[#d0d0d0] dark:border-[#404040] pt-12 mt-12 space-y-6">
-      <div class="space-y-1">
+    <!-- Hairline Divider & Showcase Section (Side Projects & Experiments) -->
+    <section class="border-t border-neutral-200 dark:border-neutral-800 pt-16 sm:pt-20 mt-16 sm:mt-20 space-y-8">
+      <div class="space-y-1.5">
         <h2 class="text-xs font-pixel font-bold tracking-wider text-neutral-500 dark:text-neutral-400 uppercase">
-          Showcase
+          Side Projects & Experiments
         </h2>
-        <p class="text-xs font-sans text-neutral-500 dark:text-neutral-400">
-          Experiments, micro-tools, and visual concepts.
+        <p class="text-sm font-sans text-neutral-600 dark:text-neutral-400 leading-relaxed">
+          A collection of visual experiments, micro-tools, and open-source software.
         </p>
       </div>
 
-      <div id="showcase-list" class="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10">
+      <div id="showcase-list" class="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 mt-6 sm:mt-8">
         {
           showcaseItems.map((item) => {
             const hasImage = Boolean(item.image_url);
