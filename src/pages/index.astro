@@ -52,12 +52,41 @@ const currentlyItems = await getCurrentlyItems();
           <h1 id="profile-name" class="font-pixel font-bold text-xl text-[#1a1a1a] dark:text-white tracking-tight">
             {profile.name}
           </h1>
-          <!-- Roles in Uncut Sans -->
-          <div id="profile-roles" class="font-sans text-xs text-neutral-500 dark:text-neutral-400 mt-1 space-y-0.5">
+          <!-- Roles with Thematic Micro-Interactions -->
+          <div id="profile-roles" class="font-sans text-xs text-neutral-500 dark:text-neutral-400 mt-1 space-y-1">
             {
-              profile.roles.map((role: string) => (
-                <div class="leading-snug">{role}</div>
-              ))
+              profile.roles.map((role: string) => {
+                const lower = role.toLowerCase();
+                const isBackend = lower.includes('backend');
+                const isGame = lower.includes('game');
+
+                if (isBackend) {
+                  return (
+                    <div class="group/role relative inline-flex items-center cursor-pointer transition-colors duration-150 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium">
+                      <span>{role}</span>
+                      <span class="absolute left-full ml-3 top-1/2 -translate-y-1/2 opacity-0 pointer-events-none group-hover/role:opacity-100 group-hover/role:translate-x-0 translate-x-1.5 transition-all duration-150 ease-out z-50 flex items-center space-x-1.5 px-2 py-0.5 rounded bg-neutral-950 text-emerald-400 border border-neutral-800 font-pixel text-[10px] shadow-xl whitespace-nowrap">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span>[server] 200 OK — 1.2ms</span>
+                        <span class="animate-pulse">_</span>
+                      </span>
+                    </div>
+                  );
+                }
+
+                if (isGame) {
+                  return (
+                    <div class="group/role relative inline-flex items-center cursor-pointer transition-colors duration-150 hover:text-amber-600 dark:hover:text-amber-400 font-medium">
+                      <span>{role}</span>
+                      <span class="absolute left-full ml-3 top-1/2 -translate-y-1/2 opacity-0 pointer-events-none group-hover/role:opacity-100 group-hover/role:translate-x-0 translate-x-1.5 transition-all duration-150 ease-out z-50 flex items-center space-x-1.5 px-2 py-0.5 rounded bg-neutral-950 text-amber-300 border border-amber-500/30 font-pixel text-[10px] shadow-xl whitespace-nowrap">
+                        <span class="text-amber-400 animate-bounce">✦</span>
+                        <span>+100 XP [LVL 99]</span>
+                      </span>
+                    </div>
+                  );
+                }
+
+                return <div class="leading-snug">{role}</div>;
+              })
             }
           </div>
         </div>
@@ -194,7 +223,31 @@ const currentlyItems = await getCurrentlyItems();
           const rolesEl = document.getElementById('profile-roles');
           if (rolesEl && profile.roles) {
             rolesEl.innerHTML = profile.roles
-              .map((r: string) => `<div class="leading-snug">${r}</div>`)
+              .map((r: string) => {
+                const lower = r.toLowerCase();
+                if (lower.includes('backend')) {
+                  return `
+                  <div class="group/role relative inline-flex items-center cursor-pointer transition-colors duration-150 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium">
+                    <span>${r}</span>
+                    <span class="absolute left-full ml-3 top-1/2 -translate-y-1/2 opacity-0 pointer-events-none group-hover/role:opacity-100 group-hover/role:translate-x-0 translate-x-1.5 transition-all duration-150 ease-out z-50 flex items-center space-x-1.5 px-2 py-0.5 rounded bg-neutral-950 text-emerald-400 border border-neutral-800 font-pixel text-[10px] shadow-xl whitespace-nowrap">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                      <span>[server] 200 OK — 1.2ms</span>
+                      <span class="animate-pulse">_</span>
+                    </span>
+                  </div>`;
+                }
+                if (lower.includes('game')) {
+                  return `
+                  <div class="group/role relative inline-flex items-center cursor-pointer transition-colors duration-150 hover:text-amber-600 dark:hover:text-amber-400 font-medium">
+                    <span>${r}</span>
+                    <span class="absolute left-full ml-3 top-1/2 -translate-y-1/2 opacity-0 pointer-events-none group-hover/role:opacity-100 group-hover/role:translate-x-0 translate-x-1.5 transition-all duration-150 ease-out z-50 flex items-center space-x-1.5 px-2 py-0.5 rounded bg-neutral-950 text-amber-300 border border-amber-500/30 font-pixel text-[10px] shadow-xl whitespace-nowrap">
+                      <span class="text-amber-400 animate-bounce">✦</span>
+                      <span>+100 XP [LVL 99]</span>
+                    </span>
+                  </div>`;
+                }
+                return `<div class="leading-snug">${r}</div>`;
+              })
               .join('');
           }
 
