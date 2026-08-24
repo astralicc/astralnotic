@@ -69,6 +69,15 @@ export interface Certificate {
   display_order: number;
 }
 
+export interface ShowcaseItem {
+  id?: string;
+  title: string;
+  description: string;
+  url?: string | null;
+  tags?: string[] | null;
+  display_order?: number;
+}
+
 export interface CurrentlyItem {
   id?: string;
   action: string;
@@ -257,6 +266,23 @@ const FALLBACK_CERTIFICATES: Certificate[] = [
   },
 ];
 
+const FALLBACK_SHOWCASE: ShowcaseItem[] = [
+  {
+    title: 'Minimalist ASTRO Starter',
+    description: 'A zero-dependency template designed for high-performance personal engineering portfolios with dark mode support.',
+    url: 'https://github.com',
+    tags: ['Astro', 'TypeScript', 'Tailwind CSS'],
+    display_order: 1,
+  },
+  {
+    title: 'WebGL Shader Particle Playground',
+    description: 'Interactive browser canvas shader experiments exploring GPU particle physics and real-time noise displacement.',
+    url: 'https://example.com',
+    tags: ['Three.js', 'GLSL', 'WebGL'],
+    display_order: 2,
+  },
+];
+
 const FALLBACK_CURRENTLY: CurrentlyItem[] = [
   { action: 'Reading', detail: 'Designing Data-Intensive Applications', display_order: 1 },
   { action: 'Building', detail: 'Open-source Astro primitives', display_order: 2 },
@@ -401,6 +427,22 @@ export async function getCertificates(): Promise<Certificate[]> {
     return data as Certificate[];
   } catch {
     return FALLBACK_CERTIFICATES;
+  }
+}
+
+export async function getShowcaseItems(): Promise<ShowcaseItem[]> {
+  try {
+    const { data, error } = await supabase
+      .from('showcases')
+      .select('*')
+      .order('display_order', { ascending: true });
+
+    if (error || !data || data.length === 0) {
+      return FALLBACK_SHOWCASE;
+    }
+    return data as ShowcaseItem[];
+  } catch {
+    return FALLBACK_SHOWCASE;
   }
 }
 

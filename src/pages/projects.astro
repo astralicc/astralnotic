@@ -1,8 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getProjects } from '../lib/supabase';
+import { getProjects, getShowcaseItems, formatRichText } from '../lib/supabase';
 
 const sortedProjects = await getProjects();
+const showcaseItems = await getShowcaseItems();
 ---
 
 <BaseLayout
@@ -170,15 +171,64 @@ const sortedProjects = await getProjects();
         })
       }
     </div>
+
+    <!-- Hairline Divider & Showcase Section -->
+    <div class="border-t border-[#d0d0d0] dark:border-[#404040] pt-12 mt-12 space-y-6">
+      <div class="space-y-1">
+        <h2 class="text-xs font-pixel font-bold tracking-wider text-neutral-500 dark:text-neutral-400 uppercase">
+          Showcase
+        </h2>
+        <p class="text-xs font-sans text-neutral-500 dark:text-neutral-400">
+          Experiments, micro-tools, and visual concepts.
+        </p>
+      </div>
+
+      <div id="showcase-list" class="space-y-6">
+        {
+          showcaseItems.map((item) => (
+            <article class="py-4 border-b border-neutral-300/30 dark:border-neutral-800/60 last:border-0 pb-4 space-y-2">
+              <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+                <h3 class="text-sm font-bold font-pixel text-[#1a1a1a] dark:text-[#e8e8e8]">
+                  {item.url ? (
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="link-slate"
+                    >
+                      {item.title} ↗
+                    </a>
+                  ) : (
+                    <span>{item.title}</span>
+                  )}
+                </h3>
+
+                {item.tags && item.tags.length > 0 && (
+                  <div class="font-pixel text-xs text-neutral-500 dark:text-neutral-400 shrink-0">
+                    {item.tags.join(' · ')}
+                  </div>
+                )}
+              </div>
+
+              <p set:html={formatRichText(item.description)} class="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans font-normal" />
+            </article>
+          ))
+        }
+      </div>
+    </div>
   </div>
 
   <!-- Client-side hydration script for instant live Supabase data updates -->
   <script>
-    import { getProjects } from '../lib/supabase';
+    import { getProjects, getShowcaseItems, formatRichText } from '../lib/supabase';
 
     async function refreshProjectsPage() {
       try {
-        const projects = await getProjects();
+        const [projects, showcases] = await Promise.all([
+          getProjects(),
+          getShowcaseItems(),
+        ]);
+
         const container = document.getElementById('projects-list');
         if (container && projects && projects.length > 0) {
           container.innerHTML = projects
@@ -239,6 +289,31 @@ const sortedProjects = await getProjects();
                   <div class="font-pixel text-xs text-neutral-500 dark:text-neutral-400 pt-1">${tagStr}</div>
                 </article>`;
               }
+            })
+            .join('');
+        }
+
+        const showcaseContainer = document.getElementById('showcase-list');
+        if (showcaseContainer && showcases && showcases.length > 0) {
+          showcaseContainer.innerHTML = showcases
+            .map((item) => {
+              const tagStr = item.tags && item.tags.length > 0
+                ? `<div class="font-pixel text-xs text-neutral-500 dark:text-neutral-400 shrink-0">${item.tags.join(' · ')}</div>`
+                : '';
+              const titleHtml = item.url
+                ? `<a href="${item.url}" target="_blank" rel="noopener noreferrer" class="link-slate">${item.title} ↗</a>`
+                : `<span>${item.title}</span>`;
+
+              return `
+              <article class="py-4 border-b border-neutral-300/30 dark:border-neutral-800/60 last:border-0 pb-4 space-y-2">
+                <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+                  <h3 class="text-sm font-bold font-pixel text-[#1a1a1a] dark:text-[#e8e8e8]">
+                    ${titleHtml}
+                  </h3>
+                  ${tagStr}
+                </div>
+                <p class="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans font-normal">${formatRichText(item.description)}</p>
+              </article>`;
             })
             .join('');
         }
