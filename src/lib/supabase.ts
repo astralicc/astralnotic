@@ -73,6 +73,7 @@ export interface ShowcaseItem {
   id?: string;
   title: string;
   description: string;
+  image_url?: string | null;
   url?: string | null;
   tags?: string[] | null;
   display_order?: number;
@@ -270,6 +271,7 @@ const FALLBACK_SHOWCASE: ShowcaseItem[] = [
   {
     title: 'Minimalist ASTRO Starter',
     description: 'A zero-dependency template designed for high-performance personal engineering portfolios with dark mode support.',
+    image_url: '/assets/minimal-astro-starter.jpg',
     url: 'https://github.com',
     tags: ['Astro', 'TypeScript', 'Tailwind CSS'],
     display_order: 1,
@@ -277,6 +279,7 @@ const FALLBACK_SHOWCASE: ShowcaseItem[] = [
   {
     title: 'WebGL Shader Particle Playground',
     description: 'Interactive browser canvas shader experiments exploring GPU particle physics and real-time noise displacement.',
+    image_url: '/assets/antigravity-analytics.jpg',
     url: 'https://example.com',
     tags: ['Three.js', 'GLSL', 'WebGL'],
     display_order: 2,
