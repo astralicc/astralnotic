@@ -96,7 +96,7 @@ if (!data) {
             <img
               src={data.image_url}
               alt={data.title}
-              class="w-full h-auto object-cover opacity-95"
+              class="w-full h-auto max-h-[580px] object-contain mx-auto opacity-95 block"
             />
           ) : (
             <div class="p-8 sm:p-12 flex flex-col items-center justify-center min-h-[200px] text-center space-y-2">
@@ -250,7 +250,7 @@ if (!data) {
         if (project && project.image_url) {
           const imgContainer = document.getElementById('project-image-container');
           if (imgContainer) {
-            imgContainer.innerHTML = `<img src="${project.image_url}" alt="${project.title}" class="w-full h-auto object-cover opacity-95" />`;
+            imgContainer.innerHTML = `<img src="${project.image_url}" alt="${project.title}" class="w-full h-auto max-h-[580px] object-contain mx-auto opacity-95 block" />`;
           }
         }
       } catch {
