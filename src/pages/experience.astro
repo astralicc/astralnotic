@@ -99,10 +99,10 @@ const certificates = await getCertificates();
       </div>
     </section>
 
-    <!-- Section 3: Certificates & Credentials (Dynamically Fetched from Supabase) -->
+    <!-- Section 3: Certificates (Dynamically Fetched from Supabase) -->
     <section class="space-y-8 pt-4">
       <h2 class="text-xs font-pixel font-bold tracking-wider text-neutral-500 dark:text-neutral-400 border-b border-[#d0d0d0] dark:border-[#404040] pb-3 uppercase">
-        Certificates & Credentials
+        Certificates
       </h2>
 
       <div id="certificates-list" class="space-y-8">
@@ -127,7 +127,7 @@ const certificates = await getCertificates();
                       rel="noopener noreferrer"
                       class="font-pixel text-[10px] link-slate text-neutral-500 dark:text-neutral-400"
                     >
-                      Verify Credential ↗
+                      See Certificate ↗
                     </a>
                   )}
                 </div>
@@ -244,7 +244,7 @@ const certificates = await getCertificates();
                   <h3 class="font-bold text-xs text-[#1a1a1a] dark:text-[#e8e8e8] font-pixel">
                     ${cert.title}
                   </h3>
-                  ${cert.credential_url ? `<a href="${cert.credential_url}" target="_blank" rel="noopener noreferrer" class="font-pixel text-[10px] link-slate text-neutral-500 dark:text-neutral-400">Verify Credential ↗</a>` : ''}
+                  ${cert.credential_url ? `<a href="${cert.credential_url}" target="_blank" rel="noopener noreferrer" class="font-pixel text-[10px] link-slate text-neutral-500 dark:text-neutral-400">See Certificate ↗</a>` : ''}
                 </div>
                 <p class="text-xs font-sans text-neutral-500">
                   ${cert.issuer} ${cert.credential_id ? `· ID: ${cert.credential_id}` : ''}
