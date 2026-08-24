@@ -23,8 +23,36 @@ const certificates = await getCertificates();
       </p>
     </div>
 
+    <!-- Sub-Navigation / Filter Tabs -->
+    <div class="flex flex-wrap items-center gap-2 pt-2 pb-4 border-b border-neutral-300 dark:border-neutral-800 font-pixel text-xs">
+      <button
+        data-filter="all"
+        class="exp-tab-btn px-3 py-1.5 rounded-md border font-bold transition-all duration-150 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 border-neutral-900 dark:border-white shadow-sm cursor-pointer"
+      >
+        All
+      </button>
+      <button
+        data-filter="work"
+        class="exp-tab-btn px-3 py-1.5 rounded-md border font-normal transition-all duration-150 text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-200 border-neutral-300 dark:border-neutral-800 bg-transparent cursor-pointer"
+      >
+        Work Experience
+      </button>
+      <button
+        data-filter="achievements"
+        class="exp-tab-btn px-3 py-1.5 rounded-md border font-normal transition-all duration-150 text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-200 border-neutral-300 dark:border-neutral-800 bg-transparent cursor-pointer"
+      >
+        Achievements & Honors
+      </button>
+      <button
+        data-filter="certificates"
+        class="exp-tab-btn px-3 py-1.5 rounded-md border font-normal transition-all duration-150 text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-200 border-neutral-300 dark:border-neutral-800 bg-transparent cursor-pointer"
+      >
+        Certifications & Learning
+      </button>
+    </div>
+
     <!-- Section 1: Work Experience (Dynamically Fetched from Supabase) -->
-    <section class="space-y-8">
+    <section id="work-experience-section" class="space-y-8 mt-6">
       <div class="space-y-1.5 border-b border-neutral-300 dark:border-neutral-800 pb-4">
         <h2 class="text-xs font-pixel font-bold tracking-wider text-neutral-500 dark:text-neutral-400 uppercase">
           Work Experience
@@ -73,7 +101,7 @@ const certificates = await getCertificates();
     </section>
 
     <!-- Section 2: Achievements & Honors (Dynamically Fetched from Supabase) -->
-    <section class="border-t border-neutral-200 dark:border-neutral-800 pt-16 sm:pt-20 mt-16 sm:mt-20 space-y-8">
+    <section id="achievements-section" class="space-y-8 transition-all duration-200 border-t border-neutral-200 dark:border-neutral-800 pt-12 sm:pt-16 mt-12 sm:mt-16">
       <div class="space-y-1.5 border-b border-neutral-300 dark:border-neutral-800 pb-4">
         <h2 class="text-xs font-pixel font-bold tracking-wider text-neutral-500 dark:text-neutral-400 uppercase">
           Achievements & Honors
@@ -109,7 +137,7 @@ const certificates = await getCertificates();
     </section>
 
     <!-- Section 3: Certificates (Dynamically Fetched from Supabase) -->
-    <section class="border-t border-neutral-200 dark:border-neutral-800 pt-16 sm:pt-20 mt-16 sm:mt-20 space-y-8">
+    <section id="certificates-section" class="space-y-8 transition-all duration-200 border-t border-neutral-200 dark:border-neutral-800 pt-12 sm:pt-16 mt-12 sm:mt-16">
       <div class="space-y-1.5 border-b border-neutral-300 dark:border-neutral-800 pb-4">
         <h2 class="text-xs font-pixel font-bold tracking-wider text-neutral-500 dark:text-neutral-400 uppercase">
           Certifications & Learning
@@ -168,9 +196,62 @@ const certificates = await getCertificates();
     </section>
   </div>
 
-  <!-- Client-side hydration script for instant live Supabase data updates -->
+  <!-- Client-side hydration script for instant live Supabase data updates & category filtering -->
   <script>
     import { getExperiences, getAchievements, getCertificates, formatRichText } from '../lib/supabase';
+
+    function initExperienceTabs() {
+      const tabBtns = document.querySelectorAll('.exp-tab-btn');
+      const workSec = document.getElementById('work-experience-section');
+      const achSec = document.getElementById('achievements-section');
+      const certSec = document.getElementById('certificates-section');
+
+      tabBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const filter = btn.getAttribute('data-filter');
+
+          // Reset styling
+          tabBtns.forEach((b) => {
+            b.classList.remove(
+              'bg-neutral-900', 'dark:bg-white', 'text-white', 'dark:text-neutral-900',
+              'border-neutral-900', 'dark:border-white', 'font-bold', 'shadow-sm'
+            );
+            b.classList.add(
+              'text-neutral-500', 'hover:text-neutral-900', 'dark:hover:text-neutral-200',
+              'border-neutral-300', 'dark:border-neutral-800', 'bg-transparent', 'font-normal'
+            );
+          });
+
+          // Active styling
+          btn.classList.remove(
+            'text-neutral-500', 'hover:text-neutral-900', 'dark:hover:text-neutral-200',
+            'border-neutral-300', 'dark:border-neutral-800', 'bg-transparent', 'font-normal'
+          );
+          btn.classList.add(
+            'bg-neutral-900', 'dark:bg-white', 'text-white', 'dark:text-neutral-900',
+            'border-neutral-900', 'dark:border-white', 'font-bold', 'shadow-sm'
+          );
+
+          if (filter === 'all') {
+            if (workSec) { workSec.style.display = 'block'; workSec.className = "space-y-8 mt-6"; }
+            if (achSec) { achSec.style.display = 'block'; achSec.className = "space-y-8 transition-all duration-200 border-t border-neutral-200 dark:border-neutral-800 pt-12 sm:pt-16 mt-12 sm:mt-16"; }
+            if (certSec) { certSec.style.display = 'block'; certSec.className = "space-y-8 transition-all duration-200 border-t border-neutral-200 dark:border-neutral-800 pt-12 sm:pt-16 mt-12 sm:mt-16"; }
+          } else if (filter === 'work') {
+            if (workSec) { workSec.style.display = 'block'; workSec.className = "space-y-8 mt-6"; }
+            if (achSec) { achSec.style.display = 'none'; }
+            if (certSec) { certSec.style.display = 'none'; }
+          } else if (filter === 'achievements') {
+            if (workSec) { workSec.style.display = 'none'; }
+            if (achSec) { achSec.style.display = 'block'; achSec.className = "space-y-8 transition-all duration-200 mt-6 pt-0 border-t-0"; }
+            if (certSec) { certSec.style.display = 'none'; }
+          } else if (filter === 'certificates') {
+            if (workSec) { workSec.style.display = 'none'; }
+            if (achSec) { achSec.style.display = 'none'; }
+            if (certSec) { certSec.style.display = 'block'; certSec.className = "space-y-8 transition-all duration-200 mt-6 pt-0 border-t-0"; }
+          }
+        });
+      });
+    }
 
     async function refreshExperiencePage() {
       try {
@@ -275,7 +356,17 @@ const certificates = await getCertificates();
       }
     }
 
-    refreshExperiencePage();
-    document.addEventListener('astro:after-swap', refreshExperiencePage);
+    const runInit = () => {
+      initExperienceTabs();
+      refreshExperiencePage();
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', runInit);
+    } else {
+      runInit();
+    }
+
+    document.addEventListener('astro:after-swap', runInit);
   </script>
 </BaseLayout>

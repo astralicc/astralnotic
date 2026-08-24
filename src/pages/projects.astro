@@ -29,21 +29,30 @@ const showcaseItems = await getShowcaseItems();
         All
       </button>
       <button
-        data-filter="featured"
+        data-filter="main"
         class="project-tab-btn px-3 py-1.5 rounded-md border font-normal transition-all duration-150 text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-200 border-neutral-300 dark:border-neutral-800 bg-transparent cursor-pointer"
       >
-        Featured Projects
+        Main Projects
       </button>
       <button
-        data-filter="showcase"
+        data-filter="side"
         class="project-tab-btn px-3 py-1.5 rounded-md border font-normal transition-all duration-150 text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-200 border-neutral-300 dark:border-neutral-800 bg-transparent cursor-pointer"
       >
-        Showcase / Labs
+        Side Projects & Labs
       </button>
     </div>
 
     <!-- Main Projects Section -->
-    <section id="main-projects-section" class="transition-opacity duration-200">
+    <section id="main-projects-section" class="space-y-6 transition-all duration-200 mt-6">
+      <div class="space-y-1.5 border-b border-neutral-300 dark:border-neutral-800 pb-4">
+        <h2 class="text-xs font-pixel font-bold tracking-wider text-neutral-500 dark:text-neutral-400 uppercase">
+          Main Projects
+        </h2>
+        <p class="text-sm font-sans text-neutral-600 dark:text-neutral-400 leading-relaxed">
+          Selected production web applications, open-source software, and design systems.
+        </p>
+      </div>
+
       <div id="projects-list">
         {
           sortedProjects.map((project) => {
@@ -189,13 +198,13 @@ const showcaseItems = await getShowcaseItems();
     </section>
 
     <!-- Hairline Divider & Showcase Section (Side Projects & Experiments) -->
-    <section id="showcase-projects-section" class="border-t border-neutral-200 dark:border-neutral-800 pt-16 sm:pt-20 mt-16 sm:mt-20 space-y-8 transition-opacity duration-200">
+    <section id="showcase-projects-section" class="space-y-8 transition-all duration-200 border-t border-neutral-200 dark:border-neutral-800 pt-12 sm:pt-16 mt-12 sm:mt-16">
       <div class="space-y-1.5 border-b border-neutral-300 dark:border-neutral-800 pb-4">
         <h2 class="text-xs font-pixel font-bold tracking-wider text-neutral-500 dark:text-neutral-400 uppercase">
           Side Projects & Experiments
         </h2>
         <p class="text-sm font-sans text-neutral-600 dark:text-neutral-400 leading-relaxed">
-          A collection of visual experiments, micro-tools, and open-source software.
+          Experimental creations, micro-tools, and visual concepts built in my spare time!
         </p>
       </div>
 
@@ -299,16 +308,22 @@ const showcaseItems = await getShowcaseItems();
             'border-neutral-900', 'dark:border-white', 'font-bold', 'shadow-sm'
           );
 
-          // Perform filtering with smooth section visibility toggle
+          // Perform filtering with smooth section visibility toggle & perfect spacing
           if (filter === 'all') {
             if (mainSection) { mainSection.style.display = 'block'; }
-            if (showcaseSection) { showcaseSection.style.display = 'block'; }
-          } else if (filter === 'featured') {
+            if (showcaseSection) {
+              showcaseSection.style.display = 'block';
+              showcaseSection.className = "space-y-8 transition-all duration-200 border-t border-neutral-200 dark:border-neutral-800 pt-12 sm:pt-16 mt-12 sm:mt-16";
+            }
+          } else if (filter === 'main') {
             if (mainSection) { mainSection.style.display = 'block'; }
             if (showcaseSection) { showcaseSection.style.display = 'none'; }
-          } else if (filter === 'showcase') {
+          } else if (filter === 'side') {
             if (mainSection) { mainSection.style.display = 'none'; }
-            if (showcaseSection) { showcaseSection.style.display = 'block'; }
+            if (showcaseSection) {
+              showcaseSection.style.display = 'block';
+              showcaseSection.className = "space-y-8 transition-all duration-200 mt-6 pt-0 border-t-0";
+            }
           }
         });
       });
