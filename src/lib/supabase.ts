@@ -368,3 +368,53 @@ export async function getCurrentlyItems(): Promise<CurrentlyItem[]> {
     return FALLBACK_CURRENTLY;
   }
 }
+
+// 7. Supabase Storage Image Upload Helpers
+
+export async function uploadProjectImage(
+  file: File,
+  bucketName = 'portfolio-images'
+): Promise<{ publicUrl: string | null; error: string | null }> {
+  try {
+    const fileExt = file.name.split('.').pop() || 'png';
+    const cleanFileName = file.name
+      .replace(/\.[^/.]+$/, '')
+      .replace(/[^a-zA-Z0-9_-]/g, '_');
+    const filePath = `projects/${Date.now()}_${cleanFileName}.${fileExt}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from(bucketName)
+      .upload(filePath, file, {
+        cacheControl: '3600',
+        upsert: true,
+      });
+
+    if (uploadError) {
+      return { publicUrl: null, error: uploadError.message };
+    }
+
+    const { data } = supabase.storage.from(bucketName).getPublicUrl(filePath);
+    return { publicUrl: data.publicUrl, error: null };
+  } catch (err: any) {
+    return { publicUrl: null, error: err?.message || 'Failed to upload image' };
+  }
+}
+
+export async function updateProjectImage(
+  slug: string,
+  imageUrl: string
+): Promise<{ success: boolean; error: string | null }> {
+  try {
+    const { error } = await supabase
+      .from('projects')
+      .update({ image_url: imageUrl })
+      .eq('slug', slug);
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+    return { success: true, error: null };
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Failed to update project' };
+  }
+}
