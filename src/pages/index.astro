@@ -18,7 +18,7 @@ const currentlyItems = await getCurrentlyItems();
       <!-- Left Column (1/3 Width — Personal Identity, Connect & Currently) -->
       <div class="md:col-span-4 space-y-8">
         <!-- Cute Cat Doodle Frame with Animated Line Scribble -->
-        <div class="w-full sm:w-56 p-4 rounded border border-neutral-300 dark:border-neutral-700 flex flex-col items-center justify-center relative group bg-neutral-50/50 dark:bg-neutral-900/40">
+        <div class="w-full sm:w-56 p-4 rounded border border-neutral-300 dark:border-neutral-700 flex flex-col items-center justify-center relative group">
           <!-- SVG Filter for Hand-Drawn Line Scribble / Wiggle -->
           <svg class="absolute w-0 h-0 pointer-events-none" aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;">
             <defs>
@@ -36,24 +36,13 @@ const currentlyItems = await getCurrentlyItems();
             </defs>
           </svg>
 
-          <div class="w-40 h-32 flex items-center justify-center overflow-hidden">
-            <!-- Inline Sharp Vector Cat Doodle (No mix-blend hack needed, works 100% in light & dark mode) -->
-            <svg
-              viewBox="0 0 200 130"
-              class="cat-scribble-anim w-36 h-28 text-neutral-900 dark:text-neutral-100 fill-none stroke-current"
-              stroke-width="5.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <!-- Cat Head Contour -->
-              <path d="M 42 38 Q 30 14 24 18 Q 18 42 16 58 Q 14 98 100 104 Q 186 98 184 58 Q 182 42 176 18 Q 170 14 158 38 Q 100 32 42 38 Z" />
-              <!-- Left Eye -->
-              <circle cx="74" cy="62" r="4.5" class="fill-current stroke-none" />
-              <!-- Right Eye -->
-              <circle cx="126" cy="62" r="4.5" class="fill-current stroke-none" />
-              <!-- Cute 'V' Mouth -->
-              <path d="M 90 74 L 100 84 L 110 74" stroke-width="5" />
-            </svg>
+          <div class="w-44 h-28 flex items-center justify-center overflow-hidden">
+            <!-- Original Cat Avatar PNG (Transparent Background, Preserved 16:9 Proportions) -->
+            <img
+              src="/assets/cat-avatar.png"
+              alt="Cat Avatar"
+              class="cat-scribble-anim w-full h-full object-contain dark:invert transition-all duration-150"
+            />
           </div>
         </div>
 
@@ -281,6 +270,15 @@ const currentlyItems = await getCurrentlyItems();
       filter: url(#cat-scribble-filter);
       animation: cat-scribble-wiggle 0.35s steps(2, end) infinite;
       will-change: transform, filter;
+      transition: filter 0.2s ease, transform 0.2s ease;
+    }
+
+    /* Stop scribble animation and clear filter on hover */
+    .group:hover .cat-scribble-anim,
+    .cat-scribble-anim:hover {
+      animation-play-state: paused;
+      filter: none;
+      transform: scale(1) rotate(0deg) translate(0px, 0px);
     }
 
     @keyframes cat-scribble-wiggle {
