@@ -183,71 +183,40 @@ const showcaseItems = await getShowcaseItems();
         </p>
       </div>
 
-      <div id="showcase-list" class="space-y-6">
+      <div id="showcase-list" class="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10">
         {
           showcaseItems.map((item) => {
             const hasImage = Boolean(item.image_url);
-            if (hasImage) {
-              return (
-                <article class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center py-6 border-b border-[#d0d0d0] dark:border-[#404040] last:border-0">
-                  <div class="md:col-span-5">
+            return (
+              <article class="flex flex-col space-y-4 group">
+                {hasImage && (
+                  <div class="w-full aspect-[16/10] overflow-hidden rounded-xl border border-neutral-300 dark:border-neutral-800 bg-neutral-900/90 relative">
                     {item.url ? (
                       <a
                         href={item.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="block overflow-hidden rounded-md border border-[#d0d0d0] dark:border-[#404040] group bg-neutral-900/90"
+                        class="block w-full h-full"
                       >
                         <img
                           src={item.image_url!}
                           alt={item.title}
-                          class="w-full h-auto max-h-56 object-contain group-hover:scale-105 transition-transform duration-300 mx-auto"
+                          class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300 ease-out"
                         />
                       </a>
                     ) : (
-                      <div class="overflow-hidden rounded-md border border-[#d0d0d0] dark:border-[#404040] bg-neutral-900/90">
-                        <img
-                          src={item.image_url!}
-                          alt={item.title}
-                          class="w-full h-auto max-h-56 object-contain mx-auto"
-                        />
-                      </div>
+                      <img
+                        src={item.image_url!}
+                        alt={item.title}
+                        class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300 ease-out"
+                      />
                     )}
                   </div>
+                )}
 
-                  <div class="md:col-span-7 space-y-3">
-                    <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
-                      <h3 class="text-base font-bold font-pixel text-[#1a1a1a] dark:text-[#e8e8e8]">
-                        {item.url ? (
-                          <a
-                            href={item.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="link-slate"
-                          >
-                            {item.title} ↗
-                          </a>
-                        ) : (
-                          <span>{item.title}</span>
-                        )}
-                      </h3>
-
-                      {item.tags && item.tags.length > 0 && (
-                        <div class="font-pixel text-xs text-neutral-500 dark:text-neutral-400 shrink-0">
-                          {item.tags.join(' · ')}
-                        </div>
-                      )}
-                    </div>
-
-                    <p set:html={formatRichText(item.description)} class="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans font-normal" />
-                  </div>
-                </article>
-              );
-            } else {
-              return (
-                <article class="py-4 border-b border-neutral-300/30 dark:border-neutral-800/60 last:border-0 pb-4 space-y-2">
-                  <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
-                    <h3 class="text-sm font-bold font-pixel text-[#1a1a1a] dark:text-[#e8e8e8]">
+                <div class="space-y-2">
+                  <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1.5">
+                    <h3 class="text-base font-bold font-pixel text-[#1a1a1a] dark:text-[#e8e8e8]">
                       {item.url ? (
                         <a
                           href={item.url}
@@ -270,9 +239,9 @@ const showcaseItems = await getShowcaseItems();
                   </div>
 
                   <p set:html={formatRichText(item.description)} class="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans font-normal" />
-                </article>
-              );
-            }
+                </div>
+              </article>
+            );
           })
         }
       </div>
@@ -366,32 +335,25 @@ const showcaseItems = await getShowcaseItems();
                 ? `<a href="${item.url}" target="_blank" rel="noopener noreferrer" class="link-slate">${item.title} ↗</a>`
                 : `<span>${item.title}</span>`;
 
-              if (hasImage) {
-                const imgWrap = item.url
-                  ? `<a href="${item.url}" target="_blank" rel="noopener noreferrer" class="block overflow-hidden rounded-md border border-[#d0d0d0] dark:border-[#404040] group bg-neutral-900/90"><img src="${item.image_url}" alt="${item.title}" class="w-full h-auto max-h-56 object-contain group-hover:scale-105 transition-transform duration-300 mx-auto" /></a>`
-                  : `<div class="overflow-hidden rounded-md border border-[#d0d0d0] dark:border-[#404040] bg-neutral-900/90"><img src="${item.image_url}" alt="${item.title}" class="w-full h-auto max-h-56 object-contain mx-auto" /></div>`;
+              const imgHtml = hasImage
+                ? `<div class="w-full aspect-[16/10] overflow-hidden rounded-xl border border-neutral-300 dark:border-neutral-800 bg-neutral-900/90 relative">${
+                    item.url
+                      ? `<a href="${item.url}" target="_blank" rel="noopener noreferrer" class="block w-full h-full"><img src="${item.image_url}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300 ease-out" /></a>`
+                      : `<img src="${item.image_url}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300 ease-out" />`
+                  }</div>`
+                : '';
 
-                return `
-                <article class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center py-6 border-b border-[#d0d0d0] dark:border-[#404040] last:border-0">
-                  <div class="md:col-span-5">${imgWrap}</div>
-                  <div class="md:col-span-7 space-y-3">
-                    <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
-                      <h3 class="text-base font-bold font-pixel text-[#1a1a1a] dark:text-[#e8e8e8]">${titleHtml}</h3>
-                      ${tagStr}
-                    </div>
-                    <p class="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans font-normal">${formatRichText(item.description)}</p>
-                  </div>
-                </article>`;
-              } else {
-                return `
-                <article class="py-4 border-b border-neutral-300/30 dark:border-neutral-800/60 last:border-0 pb-4 space-y-2">
-                  <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
-                    <h3 class="text-sm font-bold font-pixel text-[#1a1a1a] dark:text-[#e8e8e8]">${titleHtml}</h3>
+              return `
+              <article class="flex flex-col space-y-4 group">
+                ${imgHtml}
+                <div class="space-y-2">
+                  <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1.5">
+                    <h3 class="text-base font-bold font-pixel text-[#1a1a1a] dark:text-[#e8e8e8]">${titleHtml}</h3>
                     ${tagStr}
                   </div>
                   <p class="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans font-normal">${formatRichText(item.description)}</p>
-                </article>`;
-              }
+                </div>
+              </article>`;
             })
             .join('');
         }
