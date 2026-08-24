@@ -12,7 +12,7 @@ const showcaseItems = await getShowcaseItems();
 >
   <div class="space-y-4 max-w-4xl mx-auto">
     <!-- Header Section -->
-    <div class="space-y-2 border-b border-[#d0d0d0] dark:border-[#404040] pb-6 mb-2">
+    <div class="space-y-2 pb-1">
       <!-- Page Title: Projects (Capitalized) -->
       <h1 class="text-xl font-bold tracking-tight text-[#1a1a1a] dark:text-[#e8e8e8] font-pixel">
         Projects
@@ -20,24 +20,29 @@ const showcaseItems = await getShowcaseItems();
       <p class="text-sm font-sans text-neutral-600 dark:text-neutral-400 leading-relaxed">
         A selected collection of production web applications, open-source software, and design systems.
       </p>
-    </div>    <!-- Sub-Navigation / Filter Tabs -->
-    <div class="flex flex-wrap items-center gap-2 pt-2 pb-4 border-b border-neutral-300 dark:border-neutral-800 font-pixel text-xs">
+    </div>
+
+    <!-- Sub-Navigation / Filter Tabs -->
+    <div class="flex flex-wrap items-center gap-2 py-3 border-b border-neutral-300/60 dark:border-neutral-800/60 font-pixel text-xs">
       <button
         data-filter="all"
-        class="project-tab-btn px-3 py-1.5 rounded-md border font-bold transition-all duration-150 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 border-neutral-900 dark:border-white shadow-sm cursor-pointer"
+        class="project-tab-btn px-3 py-1.5 rounded-md border font-bold transition-all duration-150 bg-emerald-500/10 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-500/40 shadow-xs cursor-pointer flex items-center"
       >
+        <span class="tab-dot w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 shadow-[0_0_6px_rgba(16,185,129,0.8)]"></span>
         All
       </button>
       <button
         data-filter="main"
-        class="project-tab-btn px-3 py-1.5 rounded-md border font-normal transition-all duration-150 text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-200 border-neutral-300 dark:border-neutral-800 bg-transparent cursor-pointer"
+        class="project-tab-btn px-3 py-1.5 rounded-md border font-normal transition-all duration-150 bg-transparent text-neutral-500 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-500/10 dark:hover:bg-emerald-950/30 border-neutral-200 dark:border-neutral-800/60 hover:border-emerald-500/30 cursor-pointer flex items-center"
       >
+        <span class="tab-dot w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 shadow-[0_0_6px_rgba(16,185,129,0.8)] hidden"></span>
         Main Projects
       </button>
       <button
         data-filter="side"
-        class="project-tab-btn px-3 py-1.5 rounded-md border font-normal transition-all duration-150 text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-200 border-neutral-300 dark:border-neutral-800 bg-transparent cursor-pointer"
+        class="project-tab-btn px-3 py-1.5 rounded-md border font-normal transition-all duration-150 bg-transparent text-neutral-500 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-500/10 dark:hover:bg-emerald-950/30 border-neutral-200 dark:border-neutral-800/60 hover:border-emerald-500/30 cursor-pointer flex items-center"
       >
+        <span class="tab-dot w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 shadow-[0_0_6px_rgba(16,185,129,0.8)] hidden"></span>
         Side Projects & Labs
       </button>
     </div>
@@ -282,31 +287,33 @@ const showcaseItems = await getShowcaseItems();
       const mainSection = document.getElementById('main-projects-section');
       const showcaseSection = document.getElementById('showcase-projects-section');
 
+      const inactiveClasses = [
+        'bg-transparent', 'text-neutral-500', 'hover:text-emerald-600', 'dark:hover:text-emerald-400',
+        'hover:bg-emerald-500/10', 'dark:hover:bg-emerald-950/30', 'border-neutral-200',
+        'dark:border-neutral-800/60', 'hover:border-emerald-500/30', 'font-normal'
+      ];
+      const activeClasses = [
+        'bg-emerald-500/10', 'dark:bg-emerald-950/40', 'text-emerald-700', 'dark:text-emerald-300',
+        'border-emerald-500/40', 'font-bold', 'shadow-xs'
+      ];
+
       tabBtns.forEach((btn) => {
         btn.addEventListener('click', () => {
           const filter = btn.getAttribute('data-filter');
 
-          // Reset all tabs to inactive muted styling
+          // Reset all tabs to inactive styling and hide dots
           tabBtns.forEach((b) => {
-            b.classList.remove(
-              'bg-neutral-900', 'dark:bg-white', 'text-white', 'dark:text-neutral-900',
-              'border-neutral-900', 'dark:border-white', 'font-bold', 'shadow-sm'
-            );
-            b.classList.add(
-              'text-neutral-500', 'hover:text-neutral-900', 'dark:hover:text-neutral-200',
-              'border-neutral-300', 'dark:border-neutral-800', 'bg-transparent', 'font-normal'
-            );
+            b.classList.remove(...activeClasses);
+            b.classList.add(...inactiveClasses);
+            const dot = b.querySelector('.tab-dot');
+            if (dot) dot.classList.add('hidden');
           });
 
-          // Apply active solid styling to clicked tab
-          btn.classList.remove(
-            'text-neutral-500', 'hover:text-neutral-900', 'dark:hover:text-neutral-200',
-            'border-neutral-300', 'dark:border-neutral-800', 'bg-transparent', 'font-normal'
-          );
-          btn.classList.add(
-            'bg-neutral-900', 'dark:bg-white', 'text-white', 'dark:text-neutral-900',
-            'border-neutral-900', 'dark:border-white', 'font-bold', 'shadow-sm'
-          );
+          // Set clicked tab to active styling and show dot
+          btn.classList.remove(...inactiveClasses);
+          btn.classList.add(...activeClasses);
+          const activeDot = btn.querySelector('.tab-dot');
+          if (activeDot) activeDot.classList.remove('hidden');
 
           // Perform filtering with smooth section visibility toggle & perfect spacing
           if (filter === 'all') {
