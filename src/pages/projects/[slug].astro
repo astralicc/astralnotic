@@ -91,25 +91,27 @@ if (!data) {
         </div>
 
         <!-- Screenshot Display Area -->
-        {data.image_url ? (
-          <img
-            src={data.image_url}
-            alt={data.title}
-            class="w-full h-auto object-cover opacity-95"
-          />
-        ) : (
-          <div class="p-8 sm:p-12 flex flex-col items-center justify-center min-h-[200px] text-center space-y-2">
-            <div class="font-pixel text-2xl select-none">
-              🖥️
+        <div id="project-image-container">
+          {data.image_url ? (
+            <img
+              src={data.image_url}
+              alt={data.title}
+              class="w-full h-auto object-cover opacity-95"
+            />
+          ) : (
+            <div class="p-8 sm:p-12 flex flex-col items-center justify-center min-h-[200px] text-center space-y-2">
+              <div class="font-pixel text-2xl select-none">
+                🖥️
+              </div>
+              <p class="font-pixel text-xs text-[#1a1a1a] dark:text-white">
+                Interactive UI Demo Window: {data.title}
+              </p>
+              <p class="text-xs text-neutral-500 font-sans max-w-md">
+                Rendered live with zero-runtime CSS tokens and WCAG 2.1 AA screen reader compliance.
+              </p>
             </div>
-            <p class="font-pixel text-xs text-[#1a1a1a] dark:text-white">
-              Interactive UI Demo Window: {data.title}
-            </p>
-            <p class="text-xs text-neutral-500 font-sans max-w-md">
-              Rendered live with zero-runtime CSS tokens and WCAG 2.1 AA screen reader compliance.
-            </p>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </section>
 
@@ -231,4 +233,32 @@ if (!data) {
       </a>
     </div>
   </article>
+
+  <!-- Client-side hydration script for instant live Supabase project updates -->
+  <script>
+    import { getProjectBySlug } from '../../lib/supabase';
+
+    async function refreshProjectSlugPage() {
+      try {
+        const rawPath = window.location.pathname;
+        const cleanPath = rawPath.endsWith('/') ? rawPath.slice(0, -1) : rawPath;
+        const pathSegments = cleanPath.split('/');
+        const currentSlug = decodeURIComponent(pathSegments[pathSegments.length - 1] || '');
+        if (!currentSlug) return;
+
+        const project = await getProjectBySlug(currentSlug);
+        if (project && project.image_url) {
+          const imgContainer = document.getElementById('project-image-container');
+          if (imgContainer) {
+            imgContainer.innerHTML = `<img src="${project.image_url}" alt="${project.title}" class="w-full h-auto object-cover opacity-95" />`;
+          }
+        }
+      } catch {
+        // Keep pre-rendered HTML
+      }
+    }
+
+    refreshProjectSlugPage();
+    document.addEventListener('astro:after-swap', refreshProjectSlugPage);
+  </script>
 </BaseLayout>
