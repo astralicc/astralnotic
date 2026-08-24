@@ -23,35 +23,35 @@ const certificates = await getCertificates();
       </p>
     </div>
 
-    <!-- Sub-Navigation / Filter Tabs -->
-    <div class="flex flex-wrap items-center gap-2 py-3 border-b border-neutral-300/60 dark:border-neutral-800/60 font-pixel text-xs">
+    <!-- Terminal / ASCII Sub-Navigation Filter Tabs -->
+    <div class="flex flex-wrap items-center gap-6 py-3 border-b border-neutral-300/60 dark:border-neutral-800/60 font-pixel text-xs uppercase tracking-wider">
       <button
         data-filter="all"
-        class="exp-tab-btn px-3 py-1.5 rounded-md border font-bold transition-all duration-150 bg-emerald-500/10 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-500/40 shadow-xs cursor-pointer flex items-center"
+        class="exp-tab-btn text-[#1a1a1a] dark:text-neutral-100 font-bold transition-colors duration-150 cursor-pointer flex items-center gap-1.5 group"
       >
-        <span class="tab-dot w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 shadow-[0_0_6px_rgba(16,185,129,0.8)]"></span>
-        All
+        <span class="tab-prompt text-emerald-500 font-bold">&gt;</span>
+        <span>ALL</span>
       </button>
       <button
         data-filter="work"
-        class="exp-tab-btn px-3 py-1.5 rounded-md border font-normal transition-all duration-150 bg-transparent text-neutral-500 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-500/10 dark:hover:bg-emerald-950/30 border-neutral-200 dark:border-neutral-800/60 hover:border-emerald-500/30 cursor-pointer flex items-center"
+        class="exp-tab-btn text-neutral-500 hover:text-[#1a1a1a] dark:hover:text-neutral-200 font-normal transition-colors duration-150 cursor-pointer flex items-center gap-1.5 group"
       >
-        <span class="tab-dot w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 shadow-[0_0_6px_rgba(16,185,129,0.8)] hidden"></span>
-        Work Experience
+        <span class="tab-prompt text-emerald-500 font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-150">&gt;</span>
+        <span>WORK EXPERIENCE</span>
       </button>
       <button
         data-filter="achievements"
-        class="exp-tab-btn px-3 py-1.5 rounded-md border font-normal transition-all duration-150 bg-transparent text-neutral-500 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-500/10 dark:hover:bg-emerald-950/30 border-neutral-200 dark:border-neutral-800/60 hover:border-emerald-500/30 cursor-pointer flex items-center"
+        class="exp-tab-btn text-neutral-500 hover:text-[#1a1a1a] dark:hover:text-neutral-200 font-normal transition-colors duration-150 cursor-pointer flex items-center gap-1.5 group"
       >
-        <span class="tab-dot w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 shadow-[0_0_6px_rgba(16,185,129,0.8)] hidden"></span>
-        Achievements & Honors
+        <span class="tab-prompt text-emerald-500 font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-150">&gt;</span>
+        <span>ACHIEVEMENTS & HONORS</span>
       </button>
       <button
         data-filter="certificates"
-        class="exp-tab-btn px-3 py-1.5 rounded-md border font-normal transition-all duration-150 bg-transparent text-neutral-500 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-500/10 dark:hover:bg-emerald-950/30 border-neutral-200 dark:border-neutral-800/60 hover:border-emerald-500/30 cursor-pointer flex items-center"
+        class="exp-tab-btn text-neutral-500 hover:text-[#1a1a1a] dark:hover:text-neutral-200 font-normal transition-colors duration-150 cursor-pointer flex items-center gap-1.5 group"
       >
-        <span class="tab-dot w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 shadow-[0_0_6px_rgba(16,185,129,0.8)] hidden"></span>
-        Certifications & Learning
+        <span class="tab-prompt text-emerald-500 font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-150">&gt;</span>
+        <span>CERTIFICATIONS & LEARNING</span>
       </button>
     </div>
 
@@ -210,33 +210,25 @@ const certificates = await getCertificates();
       const achSec = document.getElementById('achievements-section');
       const certSec = document.getElementById('certificates-section');
 
-      const inactiveClasses = [
-        'bg-transparent', 'text-neutral-500', 'hover:text-emerald-600', 'dark:hover:text-emerald-400',
-        'hover:bg-emerald-500/10', 'dark:hover:bg-emerald-950/30', 'border-neutral-200',
-        'dark:border-neutral-800/60', 'hover:border-emerald-500/30', 'font-normal'
-      ];
-      const activeClasses = [
-        'bg-emerald-500/10', 'dark:bg-emerald-950/40', 'text-emerald-700', 'dark:text-emerald-300',
-        'border-emerald-500/40', 'font-bold', 'shadow-xs'
-      ];
-
       tabBtns.forEach((btn) => {
         btn.addEventListener('click', () => {
           const filter = btn.getAttribute('data-filter');
 
-          // Reset styling and hide dot indicators
+          // Reset styling
           tabBtns.forEach((b) => {
-            b.classList.remove(...activeClasses);
-            b.classList.add(...inactiveClasses);
-            const dot = b.querySelector('.tab-dot');
-            if (dot) dot.classList.add('hidden');
+            b.className = "exp-tab-btn text-neutral-500 hover:text-[#1a1a1a] dark:hover:text-neutral-200 font-normal transition-colors duration-150 cursor-pointer flex items-center gap-1.5 group";
+            const prompt = b.querySelector('.tab-prompt');
+            if (prompt) {
+              prompt.className = "tab-prompt text-emerald-500 font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-150";
+            }
           });
 
-          // Active styling and show dot indicator
-          btn.classList.remove(...inactiveClasses);
-          btn.classList.add(...activeClasses);
-          const activeDot = btn.querySelector('.tab-dot');
-          if (activeDot) activeDot.classList.remove('hidden');
+          // Active styling
+          btn.className = "exp-tab-btn text-[#1a1a1a] dark:text-neutral-100 font-bold transition-colors duration-150 cursor-pointer flex items-center gap-1.5 group";
+          const activePrompt = btn.querySelector('.tab-prompt');
+          if (activePrompt) {
+            activePrompt.className = "tab-prompt text-emerald-500 font-bold opacity-100";
+          }
 
           if (filter === 'all') {
             if (workSec) { workSec.style.display = 'block'; workSec.className = "space-y-8 mt-6"; }
