@@ -282,6 +282,18 @@ const showcaseItems = await getShowcaseItems();
   <script>
     import { getProjects, getShowcaseItems, formatRichText } from '../lib/supabase';
 
+    function triggerStaggerAnimation(container: HTMLElement | null) {
+      if (!container) return;
+      const articles = container.querySelectorAll('article');
+      articles.forEach((art, idx) => {
+        const el = art as HTMLElement;
+        el.classList.remove('terminal-card-anim');
+        void el.offsetWidth; // Force reflow
+        el.style.animationDelay = `${idx * 40}ms`;
+        el.classList.add('terminal-card-anim');
+      });
+    }
+
     function initFilterTabs() {
       const tabBtns = document.querySelectorAll('.project-tab-btn');
       const mainSection = document.getElementById('main-projects-section');
@@ -307,21 +319,23 @@ const showcaseItems = await getShowcaseItems();
             activePrompt.className = "tab-prompt text-emerald-500 font-bold opacity-100";
           }
 
-          // Perform filtering with smooth section visibility toggle & perfect spacing
+          // Perform filtering with smooth section visibility toggle & staggered terminal animation
           if (filter === 'all') {
-            if (mainSection) { mainSection.style.display = 'block'; }
+            if (mainSection) { mainSection.style.display = 'block'; triggerStaggerAnimation(mainSection); }
             if (showcaseSection) {
               showcaseSection.style.display = 'block';
               showcaseSection.className = "space-y-8 transition-all duration-200 border-t border-neutral-200 dark:border-neutral-800 pt-12 sm:pt-16 mt-12 sm:mt-16";
+              triggerStaggerAnimation(showcaseSection);
             }
           } else if (filter === 'main') {
-            if (mainSection) { mainSection.style.display = 'block'; }
+            if (mainSection) { mainSection.style.display = 'block'; triggerStaggerAnimation(mainSection); }
             if (showcaseSection) { showcaseSection.style.display = 'none'; }
           } else if (filter === 'side') {
             if (mainSection) { mainSection.style.display = 'none'; }
             if (showcaseSection) {
               showcaseSection.style.display = 'block';
               showcaseSection.className = "space-y-8 transition-all duration-200 mt-6 pt-0 border-t-0";
+              triggerStaggerAnimation(showcaseSection);
             }
           }
         });

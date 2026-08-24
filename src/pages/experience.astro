@@ -204,6 +204,18 @@ const certificates = await getCertificates();
   <script>
     import { getExperiences, getAchievements, getCertificates, formatRichText } from '../lib/supabase';
 
+    function triggerStaggerAnimation(container: HTMLElement | null) {
+      if (!container) return;
+      const articles = container.querySelectorAll('article');
+      articles.forEach((art, idx) => {
+        const el = art as HTMLElement;
+        el.classList.remove('terminal-card-anim');
+        void el.offsetWidth; // Force reflow
+        el.style.animationDelay = `${idx * 40}ms`;
+        el.classList.add('terminal-card-anim');
+      });
+    }
+
     function initExperienceTabs() {
       const tabBtns = document.querySelectorAll('.exp-tab-btn');
       const workSec = document.getElementById('work-experience-section');
@@ -231,21 +243,21 @@ const certificates = await getCertificates();
           }
 
           if (filter === 'all') {
-            if (workSec) { workSec.style.display = 'block'; workSec.className = "space-y-8 mt-6"; }
-            if (achSec) { achSec.style.display = 'block'; achSec.className = "space-y-8 transition-all duration-200 border-t border-neutral-200 dark:border-neutral-800 pt-12 sm:pt-16 mt-12 sm:mt-16"; }
-            if (certSec) { certSec.style.display = 'block'; certSec.className = "space-y-8 transition-all duration-200 border-t border-neutral-200 dark:border-neutral-800 pt-12 sm:pt-16 mt-12 sm:mt-16"; }
+            if (workSec) { workSec.style.display = 'block'; workSec.className = "space-y-8 mt-6"; triggerStaggerAnimation(workSec); }
+            if (achSec) { achSec.style.display = 'block'; achSec.className = "space-y-8 transition-all duration-200 border-t border-neutral-200 dark:border-neutral-800 pt-12 sm:pt-16 mt-12 sm:mt-16"; triggerStaggerAnimation(achSec); }
+            if (certSec) { certSec.style.display = 'block'; certSec.className = "space-y-8 transition-all duration-200 border-t border-neutral-200 dark:border-neutral-800 pt-12 sm:pt-16 mt-12 sm:mt-16"; triggerStaggerAnimation(certSec); }
           } else if (filter === 'work') {
-            if (workSec) { workSec.style.display = 'block'; workSec.className = "space-y-8 mt-6"; }
+            if (workSec) { workSec.style.display = 'block'; workSec.className = "space-y-8 mt-6"; triggerStaggerAnimation(workSec); }
             if (achSec) { achSec.style.display = 'none'; }
             if (certSec) { certSec.style.display = 'none'; }
           } else if (filter === 'achievements') {
             if (workSec) { workSec.style.display = 'none'; }
-            if (achSec) { achSec.style.display = 'block'; achSec.className = "space-y-8 transition-all duration-200 mt-6 pt-0 border-t-0"; }
+            if (achSec) { achSec.style.display = 'block'; achSec.className = "space-y-8 transition-all duration-200 mt-6 pt-0 border-t-0"; triggerStaggerAnimation(achSec); }
             if (certSec) { certSec.style.display = 'none'; }
           } else if (filter === 'certificates') {
             if (workSec) { workSec.style.display = 'none'; }
             if (achSec) { achSec.style.display = 'none'; }
-            if (certSec) { certSec.style.display = 'block'; certSec.className = "space-y-8 transition-all duration-200 mt-6 pt-0 border-t-0"; }
+            if (certSec) { certSec.style.display = 'block'; certSec.className = "space-y-8 transition-all duration-200 mt-6 pt-0 border-t-0"; triggerStaggerAnimation(certSec); }
           }
         });
       });
