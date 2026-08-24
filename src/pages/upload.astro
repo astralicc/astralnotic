@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getProjects } from '../lib/supabase';
 
 const projects = await getProjects();
+const adminKey = import.meta.env.PUBLIC_ADMIN_KEY || 'astralnotic2026';
 ---
 
 <BaseLayout
@@ -17,16 +18,42 @@ const projects = await getProjects();
           Project Image Uploader
         </h1>
         <span class="text-[10px] font-pixel text-neutral-400 uppercase tracking-widest border border-neutral-300 dark:border-neutral-700 px-2 py-0.5 rounded">
-          Supabase Storage
+          Admin Only
         </span>
       </div>
       <p class="text-sm font-sans text-neutral-600 dark:text-neutral-400 leading-relaxed">
-        Upload project images directly to your <code class="font-pixel text-xs bg-neutral-200 dark:bg-neutral-800 px-1 py-0.5 rounded">portfolio-images</code> Supabase bucket.
+        Restricted administration route. Upload project images directly to Supabase Storage.
       </p>
     </div>
 
-    <!-- Drag & Drop Upload Container -->
-    <div class="space-y-6">
+    <!-- Admin Authentication Lock Screen (Shown when locked) -->
+    <div id="auth-lock-card" class="border border-neutral-300 dark:border-neutral-700 rounded-xl p-8 sm:p-12 bg-neutral-50/50 dark:bg-neutral-900/30 text-center space-y-4">
+      <div class="w-12 h-12 rounded-full bg-neutral-200 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 flex items-center justify-center text-neutral-600 dark:text-neutral-300 mx-auto font-pixel text-lg">
+        🔒
+      </div>
+      <div class="space-y-1">
+        <h2 class="font-pixel text-sm font-bold text-[#1a1a1a] dark:text-white">Admin Authentication Required</h2>
+        <p class="text-xs font-sans text-neutral-500">This uploader is protected. Enter your Admin Key to proceed.</p>
+      </div>
+      <form id="auth-form" class="max-w-xs mx-auto flex items-center space-x-2 pt-2">
+        <input
+          type="password"
+          id="auth-key-input"
+          placeholder="Enter Admin Key"
+          class="flex-1 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded px-3 py-2 text-xs font-mono text-[#1a1a1a] dark:text-white focus:outline-none focus:ring-1 focus:ring-neutral-500"
+        />
+        <button
+          type="submit"
+          class="px-4 py-2 rounded bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 font-pixel text-xs font-bold hover:opacity-90 transition-opacity shrink-0"
+        >
+          Unlock
+        </button>
+      </form>
+      <p id="auth-error" class="text-xs font-mono text-red-500 font-bold hidden">Invalid Admin Key!</p>
+    </div>
+
+    <!-- Drag & Drop Upload Container (Hidden until authenticated) -->
+    <div id="uploader-wrapper" class="space-y-6 hidden" data-admin-key={adminKey}>
       <div
         id="drop-zone"
         class="border-2 border-dashed border-neutral-300 dark:border-neutral-700 hover:border-neutral-500 dark:hover:border-neutral-500 rounded-xl p-8 sm:p-12 text-center transition-all bg-neutral-50/50 dark:bg-neutral-900/30 cursor-pointer group flex flex-col items-center justify-center space-y-4"
@@ -154,9 +181,43 @@ WITH CHECK (bucket_id = 'portfolio-images');</code></pre>
     </div>
   </div>
 
-  <!-- Client-side Upload Logic -->
+  <!-- Client-side Upload & Auth Logic -->
   <script>
     import { uploadProjectImage, updateProjectImage } from '../lib/supabase';
+
+    const uploaderWrapper = document.getElementById('uploader-wrapper');
+    const authLockCard = document.getElementById('auth-lock-card');
+    const authForm = document.getElementById('auth-form');
+    const authKeyInput = document.getElementById('auth-key-input') as HTMLInputElement;
+    const authError = document.getElementById('auth-error');
+
+    const targetAdminKey = uploaderWrapper?.getAttribute('data-admin-key') || 'astralnotic2026';
+
+    const unlockUploader = () => {
+      authLockCard?.classList.add('hidden');
+      uploaderWrapper?.classList.remove('hidden');
+      sessionStorage.setItem('admin_authenticated', 'true');
+    };
+
+    // Check if authenticated via URL param (?key=...) or previous session
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlKey = urlParams.get('key') || window.location.hash.replace('#', '');
+
+    if (sessionStorage.getItem('admin_authenticated') === 'true' || urlKey === targetAdminKey) {
+      unlockUploader();
+    }
+
+    authForm?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const enteredKey = authKeyInput?.value?.trim();
+      if (enteredKey === targetAdminKey) {
+        authError?.classList.add('hidden');
+        unlockUploader();
+      } else {
+        authError?.classList.remove('hidden');
+        if (authKeyInput) authKeyInput.value = '';
+      }
+    });
 
     const dropZone = document.getElementById('drop-zone');
     const fileInput = document.getElementById('file-input') as HTMLInputElement;
