@@ -64,11 +64,13 @@ const currentlyItems = await getCurrentlyItems();
                   return (
                     <div class="group/role relative block cursor-pointer transition-colors duration-150 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium">
                       <span>{role}</span>
-                      <!-- Spring Popping-Out Server Node Card -->
-                      <span class="absolute left-0 bottom-full mb-1.5 opacity-0 scale-90 translate-y-2 pointer-events-none group-hover/role:opacity-100 group-hover/role:scale-100 group-hover/role:translate-y-0 transition-all duration-150 ease-out z-50 flex items-center space-x-2 px-2.5 py-1 rounded-md bg-neutral-950 text-emerald-400 border border-neutral-800 font-pixel text-[10px] shadow-2xl whitespace-nowrap">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span>[server_node] 200 OK — 1.2ms</span>
-                        <span class="animate-pulse font-bold">_</span>
+                      <!-- Backend Code & Server Confetti Popburst Particles -->
+                      <span class="pointer-events-none absolute inset-0 z-50">
+                        <span class="pop-particle pop-1 bg-neutral-950 border border-emerald-500/50 text-emerald-400 font-pixel text-[10px] px-1.5 py-0.5 rounded shadow-xl">&lt;/&gt;</span>
+                        <span class="pop-particle pop-5 bg-emerald-950 border border-emerald-500/70 text-emerald-300 font-pixel text-[10px] px-2 py-0.5 rounded shadow-2xl font-bold flex items-center space-x-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span><span>200 OK</span></span>
+                        <span class="pop-particle pop-2 bg-neutral-950 border border-emerald-500/50 text-emerald-400 font-pixel text-[10px] px-1.5 py-0.5 rounded shadow-xl">&#123;&nbsp;&#125;</span>
+                        <span class="pop-particle pop-3 bg-neutral-950 border border-neutral-800 text-neutral-400 font-mono text-[9px] px-1.5 py-0.5 rounded">1.2ms</span>
+                        <span class="pop-particle pop-4 bg-neutral-950 border border-neutral-800 text-emerald-400 font-pixel text-[9px] px-1.5 py-0.5 rounded">ssh://</span>
                       </span>
                     </div>
                   );
@@ -78,10 +80,13 @@ const currentlyItems = await getCurrentlyItems();
                   return (
                     <div class="group/role relative block cursor-pointer transition-colors duration-150 hover:text-amber-600 dark:hover:text-amber-400 font-medium">
                       <span>{role}</span>
-                      <!-- Spring Popping-Out Retro Arcade HUD Badge -->
-                      <span class="absolute left-0 bottom-full mb-1.5 opacity-0 scale-90 translate-y-2 pointer-events-none group-hover/role:opacity-100 group-hover/role:scale-100 group-hover/role:translate-y-0 transition-all duration-150 ease-out z-50 flex items-center space-x-2 px-2.5 py-1 rounded-md bg-neutral-950 text-amber-300 border border-amber-500/40 font-pixel text-[10px] shadow-2xl whitespace-nowrap">
-                        <span class="text-amber-400 animate-bounce">✦</span>
-                        <span>+100 XP [STAGE 01 — READY]</span>
+                      <!-- Game Designer Arcade & Retro Confetti Popburst Particles -->
+                      <span class="pointer-events-none absolute inset-0 z-50">
+                        <span class="pop-particle pop-1 bg-amber-950 border border-amber-500/50 text-amber-400 font-pixel text-[11px] px-1.5 py-0.5 rounded shadow-xl">🎮</span>
+                        <span class="pop-particle pop-5 bg-amber-500 text-neutral-950 font-pixel text-[10px] px-2 py-0.5 rounded shadow-2xl font-black flex items-center space-x-1"><span>✦</span><span>+100 XP</span></span>
+                        <span class="pop-particle pop-2 bg-amber-950 border border-amber-500/50 text-amber-300 font-pixel text-[11px] px-1.5 py-0.5 rounded shadow-xl">👾</span>
+                        <span class="pop-particle pop-3 bg-neutral-950 border border-amber-500/40 text-amber-400 font-pixel text-[9px] px-1.5 py-0.5 rounded font-bold">LVL 99</span>
+                        <span class="pop-particle pop-4 bg-neutral-950 border border-amber-500/40 text-amber-300 font-pixel text-[11px] px-1.5 py-0.5 rounded">🏆</span>
                       </span>
                     </div>
                   );
@@ -231,10 +236,12 @@ const currentlyItems = await getCurrentlyItems();
                   return `
                   <div class="group/role relative block cursor-pointer transition-colors duration-150 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium">
                     <span>${r}</span>
-                    <span class="absolute left-0 bottom-full mb-1.5 opacity-0 scale-90 translate-y-2 pointer-events-none group-hover/role:opacity-100 group-hover/role:scale-100 group-hover/role:translate-y-0 transition-all duration-150 ease-out z-50 flex items-center space-x-2 px-2.5 py-1 rounded-md bg-neutral-950 text-emerald-400 border border-neutral-800 font-pixel text-[10px] shadow-2xl whitespace-nowrap">
-                      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                      <span>[server_node] 200 OK — 1.2ms</span>
-                      <span class="animate-pulse font-bold">_</span>
+                    <span class="pointer-events-none absolute inset-0 z-50">
+                      <span class="pop-particle pop-1 bg-neutral-950 border border-emerald-500/50 text-emerald-400 font-pixel text-[10px] px-1.5 py-0.5 rounded shadow-xl">&lt;/&gt;</span>
+                      <span class="pop-particle pop-5 bg-emerald-950 border border-emerald-500/70 text-emerald-300 font-pixel text-[10px] px-2 py-0.5 rounded shadow-2xl font-bold flex items-center space-x-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span><span>200 OK</span></span>
+                      <span class="pop-particle pop-2 bg-neutral-950 border border-emerald-500/50 text-emerald-400 font-pixel text-[10px] px-1.5 py-0.5 rounded shadow-xl">&#123;&nbsp;&#125;</span>
+                      <span class="pop-particle pop-3 bg-neutral-950 border border-neutral-800 text-neutral-400 font-mono text-[9px] px-1.5 py-0.5 rounded">1.2ms</span>
+                      <span class="pop-particle pop-4 bg-neutral-950 border border-neutral-800 text-emerald-400 font-pixel text-[9px] px-1.5 py-0.5 rounded">ssh://</span>
                     </span>
                   </div>`;
                 }
@@ -242,9 +249,12 @@ const currentlyItems = await getCurrentlyItems();
                   return `
                   <div class="group/role relative block cursor-pointer transition-colors duration-150 hover:text-amber-600 dark:hover:text-amber-400 font-medium">
                     <span>${r}</span>
-                    <span class="absolute left-0 bottom-full mb-1.5 opacity-0 scale-90 translate-y-2 pointer-events-none group-hover/role:opacity-100 group-hover/role:scale-100 group-hover/role:translate-y-0 transition-all duration-150 ease-out z-50 flex items-center space-x-2 px-2.5 py-1 rounded-md bg-neutral-950 text-amber-300 border border-amber-500/40 font-pixel text-[10px] shadow-2xl whitespace-nowrap">
-                      <span class="text-amber-400 animate-bounce">✦</span>
-                      <span>+100 XP [STAGE 01 — READY]</span>
+                    <span class="pointer-events-none absolute inset-0 z-50">
+                      <span class="pop-particle pop-1 bg-amber-950 border border-amber-500/50 text-amber-400 font-pixel text-[11px] px-1.5 py-0.5 rounded shadow-xl">🎮</span>
+                      <span class="pop-particle pop-5 bg-amber-500 text-neutral-950 font-pixel text-[10px] px-2 py-0.5 rounded shadow-2xl font-black flex items-center space-x-1"><span>✦</span><span>+100 XP</span></span>
+                      <span class="pop-particle pop-2 bg-amber-950 border border-amber-500/50 text-amber-300 font-pixel text-[11px] px-1.5 py-0.5 rounded shadow-xl">👾</span>
+                      <span class="pop-particle pop-3 bg-neutral-950 border border-amber-500/40 text-amber-400 font-pixel text-[9px] px-1.5 py-0.5 rounded font-bold">LVL 99</span>
+                      <span class="pop-particle pop-4 bg-neutral-950 border border-amber-500/40 text-amber-300 font-pixel text-[11px] px-1.5 py-0.5 rounded">🏆</span>
                     </span>
                   </div>`;
                 }
@@ -362,6 +372,67 @@ const currentlyItems = await getCurrentlyItems();
       100% {
         transform: scale(1) rotate(0deg) translate(0px, 0px);
       }
+    }
+
+    /* Confetti Particle Pop-Burst Hover Animations */
+    .pop-particle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      opacity: 0;
+      pointer-events: none;
+      white-space: nowrap;
+      will-change: transform, opacity;
+    }
+
+    .group\/role:hover .pop-1 {
+      animation: particle-burst-top-left 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .group\/role:hover .pop-2 {
+      animation: particle-burst-top-right 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .group\/role:hover .pop-3 {
+      animation: particle-burst-bottom-left 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .group\/role:hover .pop-4 {
+      animation: particle-burst-bottom-right 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .group\/role:hover .pop-5 {
+      animation: particle-burst-top-center 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes particle-burst-top-left {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.2) rotate(0deg); }
+      50% { opacity: 1; transform: translate(-65px, -32px) scale(1.1) rotate(-14deg); }
+      100% { opacity: 0; transform: translate(-85px, -45px) scale(0.7) rotate(-28deg); }
+    }
+
+    @keyframes particle-burst-top-right {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.2) rotate(0deg); }
+      50% { opacity: 1; transform: translate(55px, -32px) scale(1.1) rotate(14deg); }
+      100% { opacity: 0; transform: translate(75px, -45px) scale(0.7) rotate(28deg); }
+    }
+
+    @keyframes particle-burst-bottom-left {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.2) rotate(0deg); }
+      50% { opacity: 1; transform: translate(-55px, 14px) scale(1.1) rotate(-10deg); }
+      100% { opacity: 0; transform: translate(-75px, 22px) scale(0.7) rotate(-22deg); }
+    }
+
+    @keyframes particle-burst-bottom-right {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.2) rotate(0deg); }
+      50% { opacity: 1; transform: translate(50px, 14px) scale(1.1) rotate(10deg); }
+      100% { opacity: 0; transform: translate(70px, 22px) scale(0.7) rotate(22deg); }
+    }
+
+    @keyframes particle-burst-top-center {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+      50% { opacity: 1; transform: translate(-50%, -42px) scale(1.15); }
+      100% { opacity: 0; transform: translate(-50%, -58px) scale(0.8); }
     }
   </style>
 </BaseLayout>
