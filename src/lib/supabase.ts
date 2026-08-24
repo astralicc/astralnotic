@@ -57,6 +57,18 @@ export interface Achievement {
   display_order: number;
 }
 
+export interface Certificate {
+  id?: string;
+  title: string;
+  issuer: string;
+  issue_date: string;
+  credential_id?: string | null;
+  credential_url?: string | null;
+  description?: string | null;
+  skills?: string[] | null;
+  display_order: number;
+}
+
 export interface CurrentlyItem {
   id?: string;
   action: string;
@@ -222,6 +234,29 @@ const FALLBACK_ACHIEVEMENTS: Achievement[] = [
   },
 ];
 
+const FALLBACK_CERTIFICATES: Certificate[] = [
+  {
+    title: 'AWS Certified Solutions Architect – Associate',
+    issuer: 'Amazon Web Services (AWS)',
+    issue_date: '2025',
+    credential_id: 'AWS-ASA-994201',
+    credential_url: 'https://aws.amazon.com',
+    description: 'Demonstrates expertise in designing high-availability, fault-tolerant serverless microservices on AWS cloud infrastructure.',
+    skills: ['AWS', 'Serverless', 'Cloud Architecture', 'Security'],
+    display_order: 1,
+  },
+  {
+    title: 'Meta Senior Frontend Developer Certificate',
+    issuer: 'Meta / Coursera',
+    issue_date: '2024',
+    credential_id: 'META-FED-8842',
+    credential_url: 'https://coursera.org',
+    description: 'Advanced web application development, React component optimization, system design, and web accessibility standards.',
+    skills: ['React 19', 'Design Tokens', 'Web Performance', 'Accessibility'],
+    display_order: 2,
+  },
+];
+
 const FALLBACK_CURRENTLY: CurrentlyItem[] = [
   { action: 'Reading', detail: 'Designing Data-Intensive Applications', display_order: 1 },
   { action: 'Building', detail: 'Open-source Astro primitives', display_order: 2 },
@@ -350,6 +385,22 @@ export async function getAchievements(): Promise<Achievement[]> {
     return data as Achievement[];
   } catch {
     return FALLBACK_ACHIEVEMENTS;
+  }
+}
+
+export async function getCertificates(): Promise<Certificate[]> {
+  try {
+    const { data, error } = await supabase
+      .from('certificates')
+      .select('*')
+      .order('display_order', { ascending: true });
+
+    if (error || !data || data.length === 0) {
+      return FALLBACK_CERTIFICATES;
+    }
+    return data as Certificate[];
+  } catch {
+    return FALLBACK_CERTIFICATES;
   }
 }
 

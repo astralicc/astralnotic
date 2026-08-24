@@ -1,9 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getExperiences, getAchievements, formatRichText } from '../lib/supabase';
+import { getExperiences, getAchievements, getCertificates, formatRichText } from '../lib/supabase';
 
 const sortedExperience = await getExperiences();
 const achievements = await getAchievements();
+const certificates = await getCertificates();
 ---
 
 <BaseLayout
@@ -97,17 +98,72 @@ const achievements = await getAchievements();
         }
       </div>
     </section>
+
+    <!-- Section 3: Certificates & Credentials (Dynamically Fetched from Supabase) -->
+    <section class="space-y-8 pt-4">
+      <h2 class="text-xs font-pixel font-bold tracking-wider text-neutral-500 dark:text-neutral-400 border-b border-[#d0d0d0] dark:border-[#404040] pb-3 uppercase">
+        Certificates & Credentials
+      </h2>
+
+      <div id="certificates-list" class="space-y-8">
+        {
+          certificates.map((cert) => (
+            <article class="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-8 pb-8 border-b border-neutral-300/30 dark:border-neutral-800/60 last:border-0 last:pb-0">
+              <!-- Left Column: Issue Date (4 cols) in Departure Mono -->
+              <div class="sm:col-span-4 font-pixel text-xs text-neutral-500">
+                {cert.issue_date}
+              </div>
+
+              <!-- Right Column: Title, Issuer, Credential Link & Description -->
+              <div class="sm:col-span-8 space-y-1.5">
+                <div class="flex flex-wrap items-baseline justify-between gap-2">
+                  <h3 class="font-bold text-xs text-[#1a1a1a] dark:text-[#e8e8e8] font-pixel">
+                    {cert.title}
+                  </h3>
+                  {cert.credential_url && (
+                    <a
+                      href={cert.credential_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="font-pixel text-[10px] link-slate text-neutral-500 dark:text-neutral-400"
+                    >
+                      Verify Credential ↗
+                    </a>
+                  )}
+                </div>
+                <p class="text-xs font-sans text-neutral-500">
+                  {cert.issuer} {cert.credential_id ? `· ID: ${cert.credential_id}` : ''}
+                </p>
+                {cert.description && (
+                  <p set:html={formatRichText(cert.description)} class="text-sm font-sans text-neutral-700 dark:text-neutral-300 leading-relaxed pt-0.5 font-normal" />
+                )}
+                {cert.skills && cert.skills.length > 0 && (
+                  <div class="flex flex-wrap gap-1.5 pt-1">
+                    {cert.skills.map((skill) => (
+                      <span class="font-pixel text-[10px] text-neutral-600 dark:text-neutral-400 bg-neutral-100 dark:bg-neutral-800/80 px-2 py-0.5 rounded border border-neutral-200 dark:border-neutral-700">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
   </div>
 
   <!-- Client-side hydration script for instant live Supabase data updates -->
   <script>
-    import { getExperiences, getAchievements, formatRichText } from '../lib/supabase';
+    import { getExperiences, getAchievements, getCertificates, formatRichText } from '../lib/supabase';
 
     async function refreshExperiencePage() {
       try {
-        const [exps, achs] = await Promise.all([
+        const [exps, achs, certs] = await Promise.all([
           getExperiences(),
           getAchievements(),
+          getCertificates(),
         ]);
 
         const expContainer = document.getElementById('experiences-list');
@@ -168,6 +224,33 @@ const achievements = await getAchievements();
                 <p class="text-sm font-sans text-neutral-700 dark:text-neutral-300 leading-relaxed pt-0.5 font-normal">
                   ${formatRichText(item.impact)}
                 </p>
+              </div>
+            </article>`
+            )
+            .join('');
+        }
+
+        const certContainer = document.getElementById('certificates-list');
+        if (certContainer && certs && certs.length > 0) {
+          certContainer.innerHTML = certs
+            .map(
+              (cert) => `
+            <article class="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-8 pb-8 border-b border-neutral-300/30 dark:border-neutral-800/60 last:border-0 last:pb-0">
+              <div class="sm:col-span-4 font-pixel text-xs text-neutral-500">
+                ${cert.issue_date}
+              </div>
+              <div class="sm:col-span-8 space-y-1.5">
+                <div class="flex flex-wrap items-baseline justify-between gap-2">
+                  <h3 class="font-bold text-xs text-[#1a1a1a] dark:text-[#e8e8e8] font-pixel">
+                    ${cert.title}
+                  </h3>
+                  ${cert.credential_url ? `<a href="${cert.credential_url}" target="_blank" rel="noopener noreferrer" class="font-pixel text-[10px] link-slate text-neutral-500 dark:text-neutral-400">Verify Credential ↗</a>` : ''}
+                </div>
+                <p class="text-xs font-sans text-neutral-500">
+                  ${cert.issuer} ${cert.credential_id ? `· ID: ${cert.credential_id}` : ''}
+                </p>
+                ${cert.description ? `<p class="text-sm font-sans text-neutral-700 dark:text-neutral-300 leading-relaxed pt-0.5 font-normal">${formatRichText(cert.description)}</p>` : ''}
+                ${cert.skills && cert.skills.length > 0 ? `<div class="flex flex-wrap gap-1.5 pt-1">${cert.skills.map((s) => `<span class="font-pixel text-[10px] text-neutral-600 dark:text-neutral-400 bg-neutral-100 dark:bg-neutral-800/80 px-2 py-0.5 rounded border border-neutral-200 dark:border-neutral-700">${s}</span>`).join('')}</div>` : ''}
               </div>
             </article>`
             )
