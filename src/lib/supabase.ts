@@ -245,7 +245,18 @@ const FALLBACK_PROFILE = {
   connect_links: FALLBACK_CONNECT_LINKS,
 };
 
-// 5. Data Fetching Functions
+// 5. Rich Text & Formatting Utilities
+
+export function formatRichText(text: string | null | undefined): string {
+  if (!text) return '';
+  // Convert Markdown **bold** to <strong>bold</strong>
+  let formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  // Convert Markdown *italic* to <em>italic</em>
+  formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+  return formatted;
+}
+
+// 6. Data Fetching Functions
 
 export async function getProfile() {
   try {

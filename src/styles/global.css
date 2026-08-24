@@ -89,6 +89,16 @@
     background-color: #2b2b2b;
     color: #e8e8e8;
   }
+
+  /* Bold / Strong Typography Rules for HTML & Markdown content */
+  strong, b {
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+
+  html.dark strong, html.dark b {
+    color: #ffffff;
+  }
 }
 
 /* Explicit Departure Mono class binding */

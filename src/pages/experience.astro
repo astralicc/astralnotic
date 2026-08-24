@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getExperiences, getAchievements } from '../lib/supabase';
+import { getExperiences, getAchievements, formatRichText } from '../lib/supabase';
 
 const sortedExperience = await getExperiences();
 const achievements = await getAchievements();
@@ -55,7 +55,7 @@ const achievements = await getAchievements();
                     {exp.highlights.map((item) => (
                       <li class="flex items-start space-x-2 leading-relaxed">
                         <span class="text-neutral-400 font-pixel text-xs shrink-0 mt-0.5">—</span>
-                        <span set:html={item} />
+                        <span set:html={formatRichText(item)} />
                       </li>
                     ))}
                   </ul>
@@ -90,7 +90,7 @@ const achievements = await getAchievements();
                 <p class="text-xs font-sans text-neutral-500">
                   {item.entity}
                 </p>
-                <p set:html={item.impact} class="text-sm font-sans text-neutral-700 dark:text-neutral-300 leading-relaxed pt-0.5 font-normal" />
+                <p set:html={formatRichText(item.impact)} class="text-sm font-sans text-neutral-700 dark:text-neutral-300 leading-relaxed pt-0.5 font-normal" />
               </div>
             </article>
           ))
@@ -101,7 +101,7 @@ const achievements = await getAchievements();
 
   <!-- Client-side hydration script for instant live Supabase data updates -->
   <script>
-    import { getExperiences, getAchievements } from '../lib/supabase';
+    import { getExperiences, getAchievements, formatRichText } from '../lib/supabase';
 
     async function refreshExperiencePage() {
       try {
@@ -136,7 +136,7 @@ const achievements = await getAchievements();
                             (item) => `
                           <li class="flex items-start space-x-2 leading-relaxed">
                             <span class="text-neutral-400 font-pixel text-xs shrink-0 mt-0.5">—</span>
-                            <span>${item}</span>
+                            <span>${formatRichText(item)}</span>
                           </li>`
                           )
                           .join('')}
@@ -166,7 +166,7 @@ const achievements = await getAchievements();
                   ${item.entity}
                 </p>
                 <p class="text-sm font-sans text-neutral-700 dark:text-neutral-300 leading-relaxed pt-0.5 font-normal">
-                  ${item.impact}
+                  ${formatRichText(item.impact)}
                 </p>
               </div>
             </article>`
